@@ -88,6 +88,7 @@ export class HttpWalletClient implements WalletClient {
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId ?? '',
+        'X-Source': 'plinko-game-server',
       },
     });
     if (!response.ok) {
@@ -109,6 +110,7 @@ export class HttpWalletClient implements WalletClient {
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId ?? '',
+        'X-Source': 'plinko-game-server',
       },
     });
     if (!response.ok) {
