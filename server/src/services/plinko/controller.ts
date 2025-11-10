@@ -9,8 +9,17 @@ export class PlinkoController {
   constructor(private readonly plinkoModel: PlinkoModel) {
     this.router = Router();
 
+    this.router.get('/init', this.init);
     this.router.post('/play', this.play);
   }
+
+  private init = async (req: Request, res: Response): Promise<Response> => {
+    return res.json({
+      payouts: this.plinkoModel.payouts,
+      p: this.plinkoModel.p,
+      rows: this.plinkoModel.rows,
+    });
+  };
 
   private playSchema = z.object({
     bet: z.number().min(1).max(1_000_000),
