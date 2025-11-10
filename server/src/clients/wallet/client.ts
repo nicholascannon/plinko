@@ -7,12 +7,12 @@ export interface WalletClient {
     id: string,
     amount: number,
     requestId?: string
-  ) => Promise<{ balance: number }>;
+  ) => Promise<{ balance: number; transactionId: string }>;
   debit: (
     id: string,
     amount: number,
     requestId?: string
-  ) => Promise<{ balance: number }>;
+  ) => Promise<{ balance: number; transactionId: string }>;
 }
 
 export class HttpWalletClient implements WalletClient {
@@ -80,7 +80,7 @@ export class HttpWalletClient implements WalletClient {
     id: string,
     amount: number,
     requestId?: string
-  ): Promise<{ balance: number }> {
+  ): Promise<{ balance: number; transactionId: string }> {
     this.logRequest(id, 'credit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/credit`, {
       method: 'POST',
@@ -95,14 +95,17 @@ export class HttpWalletClient implements WalletClient {
       await this.handleError(response, id, requestId);
     }
 
-    return response.json() as Promise<{ balance: number }>;
+    return response.json() as Promise<{
+      balance: number;
+      transactionId: string;
+    }>;
   }
 
   public async debit(
     id: string,
     amount: number,
     requestId?: string
-  ): Promise<{ balance: number }> {
+  ): Promise<{ balance: number; transactionId: string }> {
     this.logRequest(id, 'debit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/debit`, {
       method: 'POST',
@@ -117,6 +120,9 @@ export class HttpWalletClient implements WalletClient {
       await this.handleError(response, id, requestId);
     }
 
-    return response.json() as Promise<{ balance: number }>;
+    return response.json() as Promise<{
+      balance: number;
+      transactionId: string;
+    }>;
   }
 }

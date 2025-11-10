@@ -38,7 +38,7 @@ export class PlinkoController {
     const { payout, slot } = this.plinkoModel.play(bet);
 
     // there should be a retry mechanism here with a DLQ to ensure we end up paying out
-    const { balance } = await this.walletClient.credit(
+    const { balance, transactionId } = await this.walletClient.credit(
       walletId,
       payout,
       req.requestId
@@ -49,6 +49,7 @@ export class PlinkoController {
       slot,
       balance,
       requestId: req.requestId,
+      transactionId,
     });
   };
 }
