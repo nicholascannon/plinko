@@ -4,6 +4,9 @@ export const CONFIG = z
   .object({
     env: z.enum(['development', 'production', 'test']),
     port: z.string().transform(Number),
+    wallet: z.object({
+      url: z.string(),
+    }),
     plinko: z.object({
       targetRtp: z.string().transform(Number),
       rows: z.string().transform(Number),
@@ -15,6 +18,9 @@ export const CONFIG = z
   .parse({
     env: process.env.NODE_ENV,
     port: process.env.PORT,
+    wallet: {
+      url: process.env.WALLET_URL,
+    },
     plinko: {
       targetRtp: process.env.PLINKO_TARGET_RTP,
       rows: process.env.PLINKO_ROWS,
