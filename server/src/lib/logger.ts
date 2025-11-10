@@ -20,7 +20,7 @@ export const LOGGER = winston.createLogger({
 export const loggingMiddleware = expressWinston.logger({
   winstonInstance: LOGGER,
   headerBlacklist: ['authorization', 'cookie'],
-  ignoreRoute: (req) => req.path === '/healthcheck',
+  ignoreRoute: (req) => req.path === '/health',
 });
 
 export const setupProcessLogging = () => {
