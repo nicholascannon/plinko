@@ -47,7 +47,7 @@ export class HttpWalletClient implements WalletClient {
   }
 
   private logRequest(id: string, operation: 'credit' | 'debit') {
-    LOGGER.info('Wallet request', { id, operation });
+    LOGGER.info('Wallet operation', { id, operation });
   }
 
   public async credit(
