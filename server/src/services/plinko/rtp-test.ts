@@ -8,7 +8,7 @@ function testRtp(model: PlinkoModel, iterations: number = 1_000_000) {
   let totalPayout = 0;
 
   for (let i = 0; i < iterations; i++) {
-    const { payout } = model.play();
+    const { payout } = model.play(1);
     totalPayout += payout;
   }
 
