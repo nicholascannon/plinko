@@ -11,7 +11,8 @@ export class HttpWalletClientError extends Error {
     public readonly type: HttpWalletClientErrorType,
     public readonly payload: Record<string, any>,
     public readonly httpCode: number,
-    public readonly walletId: string
+    public readonly walletId: string,
+    public readonly requestId?: string
   ) {
     super(type);
     this.name = 'HttpWalletClientError';

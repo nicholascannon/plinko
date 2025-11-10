@@ -33,13 +33,17 @@ export class PlinkoController {
   private play = async (req: Request, res: Response): Promise<Response> => {
     const { bet, walletId } = this.playSchema.parse(req.body);
 
-    await this.walletClient.debit(walletId, bet);
+    await this.walletClient.debit(walletId, bet, req.requestId);
 
     const { payout, slot } = this.plinkoModel.play(bet);
 
     // there should be a retry mechanism here with a DLQ to ensure we end up paying out
-    const { balance } = await this.walletClient.credit(walletId, payout);
+    const { balance } = await this.walletClient.credit(
+      walletId,
+      payout,
+      req.requestId
+    );
 
-    return res.json({ payout, slot, balance });
+    return res.json({ payout, slot, balance, requestId: req.requestId });
   };
 }
