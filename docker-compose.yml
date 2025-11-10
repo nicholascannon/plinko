@@ -1,0 +1,13 @@
+services:
+  server:
+    build: ./server
+    ports:
+      - 8001:8001
+    environment:
+      PORT: 8001
+      WALLET_URL: http://localhost:8000
+      PLINKO_TARGET_RTP: 0.95
+      PLINKO_ROWS: 16
+      PLINKO_P: 0.5
+      PLINKO_MIDDLE_PAYOUT: 0.2
+      PLINKO_EDGE_PAYOUT: 100
