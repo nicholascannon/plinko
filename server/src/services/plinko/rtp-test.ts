@@ -1,3 +1,5 @@
+import 'dotenv/config';
+import { CONFIG } from '../../config/env.js';
 import { PlinkoModel } from './model.js';
 
 function testRtp(model: PlinkoModel, iterations: number = 1_000_000) {
@@ -34,11 +36,7 @@ function testRtp(model: PlinkoModel, iterations: number = 1_000_000) {
 }
 
 const model = new PlinkoModel({
-  targetRtp: 0.95,
-  rows: 16,
-  p: 0.5,
-  middlePayout: 0.2,
-  edgePayout: 100,
+  ...CONFIG.plinko,
 });
 
 testRtp(model, 1_000_000);
