@@ -1,0 +1,16 @@
+meta {
+  name: Plinko init game
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8001/v1/plinko/init
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

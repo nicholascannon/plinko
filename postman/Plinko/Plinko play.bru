@@ -1,0 +1,23 @@
+meta {
+  name: Plinko play
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8001/v1/plinko/play
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "bet": 100,
+      "walletId": "4bcaf50f-7c95-4f97-9a08-fbaddf966cb9"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
