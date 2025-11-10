@@ -44,6 +44,11 @@ export class PlinkoController {
       req.requestId
     );
 
-    return res.json({ payout, slot, balance, requestId: req.requestId });
+    return res.json({
+      winAmount: payout - bet,
+      slot,
+      balance,
+      requestId: req.requestId,
+    });
   };
 }
