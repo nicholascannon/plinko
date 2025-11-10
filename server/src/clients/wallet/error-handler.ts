@@ -13,20 +13,27 @@ export function walletClientErrorHandler(
 
     switch (error.type) {
       case 'WALLET_NOT_FOUND':
-        return res
-          .status(404)
-          .json({ message: 'Wallet not found', requestId: error.requestId });
+        return res.status(404).json({
+          message: 'Wallet not found',
+          requestId: error.requestId,
+          walletId: error.walletId,
+        });
       case 'INVALID_DEBIT_AMOUNT':
-        return res
-          .status(400)
-          .json({
-            message: 'Invalid debit amount',
-            requestId: error.requestId,
-          });
+        return res.status(400).json({
+          message: 'Invalid debit amount',
+          requestId: error.requestId,
+          walletId: error.walletId,
+          debitAmount: error.payload.amount,
+        });
       case 'INSUFFICIENT_FUNDS':
         return res
           .status(400)
-          .json({ message: 'Insufficient funds', requestId: error.requestId });
+          .json({
+            message: 'Insufficient funds',
+            requestId: error.requestId,
+            balance: error.payload.availableBalance,
+            walletId: error.walletId,
+          });
     }
   }
 
