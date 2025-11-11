@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: testing */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpWalletClient } from '../client.js';
 import { HttpWalletClientError } from '../errors.js';
