@@ -7,7 +7,7 @@ extend({ Graphics });
 
 export function App() {
   return (
-    <Application antialias resizeTo={window}>
+    <Application antialias resizeTo={window} resolution={1}>
       <pixiGraphics
         draw={(graphics) => {
           graphics.clear();
