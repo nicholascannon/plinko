@@ -1,21 +1,15 @@
 import { Application, extend } from '@pixi/react';
-import { Graphics } from 'pixi.js';
+import { Container, Graphics, Text } from 'pixi.js';
 
 import './app.css';
+import { PlinkoBoard } from './components/plinko-board';
 
-extend({ Graphics });
+extend({ Graphics, Container, Text });
 
 export function App() {
   return (
     <Application antialias resizeTo={window} resolution={1}>
-      <pixiGraphics
-        draw={(graphics) => {
-          graphics.clear();
-          graphics.setFillStyle({ color: 'red' });
-          graphics.rect(0, 0, 100, 100);
-          graphics.fill();
-        }}
-      />
+      <PlinkoBoard buckets={Array.from({ length: 8 }, (_, i) => i + 1)} />
     </Application>
   );
 }
