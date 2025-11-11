@@ -14,7 +14,7 @@ COPY tsconfig.json .
 COPY ./src ./src
 
 RUN npm run build
-# RUN npm run test
+RUN npm run test
 
 FROM base AS runtime
 WORKDIR /opt/app
