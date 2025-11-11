@@ -2,16 +2,16 @@ import { LOGGER } from '../../lib/logger.js';
 import { HttpWalletClientError } from './errors.js';
 
 export interface WalletClient {
-  getBalance: (id: string, requestId?: string) => Promise<{ balance: number }>;
+  getBalance: (id: string, requestId: string) => Promise<{ balance: number }>;
   credit: (
     id: string,
     amount: number,
-    requestId?: string
+    requestId: string
   ) => Promise<{ balance: number; transactionId: string }>;
   debit: (
     id: string,
     amount: number,
-    requestId?: string
+    requestId: string
   ) => Promise<{ balance: number; transactionId: string }>;
 }
 
@@ -20,20 +20,20 @@ export class HttpWalletClient implements WalletClient {
 
   public async getBalance(
     id: string,
-    requestId?: string
+    requestId: string
   ): Promise<{ balance: number }> {
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}`, {
       headers: {
-        'X-Request-Id': requestId ?? '',
+        'X-Request-Id': requestId,
       },
     });
     return response.json() as Promise<{ balance: number }>;
   }
 
-  private async handleError(
+  public async handleError(
     response: Response,
     walletId: string,
-    requestId?: string
+    requestId: string
   ): Promise<never> {
     const payload = (await response.json()) as Record<string, any>; // not the best
     switch (payload.error) {
@@ -71,7 +71,7 @@ export class HttpWalletClient implements WalletClient {
   private logRequest(
     id: string,
     operation: 'credit' | 'debit',
-    requestId?: string
+    requestId: string
   ) {
     LOGGER.info('Wallet operation', { id, operation, requestId });
   }
@@ -79,7 +79,7 @@ export class HttpWalletClient implements WalletClient {
   public async credit(
     id: string,
     amount: number,
-    requestId?: string
+    requestId: string
   ): Promise<{ balance: number; transactionId: string }> {
     this.logRequest(id, 'credit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/credit`, {
@@ -87,7 +87,7 @@ export class HttpWalletClient implements WalletClient {
       body: JSON.stringify({ amount }),
       headers: {
         'Content-Type': 'application/json',
-        'X-Request-Id': requestId ?? '',
+        'X-Request-Id': requestId,
         'X-Source': 'plinko-game-server',
       },
     });
@@ -104,7 +104,7 @@ export class HttpWalletClient implements WalletClient {
   public async debit(
     id: string,
     amount: number,
-    requestId?: string
+    requestId: string
   ): Promise<{ balance: number; transactionId: string }> {
     this.logRequest(id, 'debit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/debit`, {
@@ -112,7 +112,7 @@ export class HttpWalletClient implements WalletClient {
       body: JSON.stringify({ amount }),
       headers: {
         'Content-Type': 'application/json',
-        'X-Request-Id': requestId ?? '',
+        'X-Request-Id': requestId,
         'X-Source': 'plinko-game-server',
       },
     });
