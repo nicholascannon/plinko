@@ -8,7 +8,12 @@ extend({ Graphics, Container, Text });
 
 export function App() {
   return (
-    <Application antialias resizeTo={window} resolution={1}>
+    <Application
+      resizeTo={window}
+      antialias
+      autoDensity
+      resolution={window.devicePixelRatio}
+    >
       <PlinkoBoard buckets={Array.from({ length: 8 }, (_, i) => i + 1)} />
     </Application>
   );
