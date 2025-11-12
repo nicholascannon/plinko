@@ -1,26 +1,18 @@
-import { Application, extend } from '@pixi/react';
-import { Container, Graphics, Text } from 'pixi.js';
-import { PlinkoBoard } from './components/plinko-board';
+import { PlinkoGame } from './components/game/plinko-game';
 
 import './app.css';
 
-extend({ Graphics, Container, Text });
-
 export function App() {
   return (
-    <Application
-      resizeTo={window}
-      antialias
-      autoDensity
-      resolution={window.devicePixelRatio}
-      autoStart
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
-      <PlinkoBoard
-        x={window.innerHeight * 0.1}
-        y={window.innerWidth * 0.1}
-        spacing={50}
-        buckets={Array.from({ length: 8 }, (_, i) => i + 1)}
-      />
-    </Application>
+      <PlinkoGame height={500} width={500} />
+    </div>
   );
 }
