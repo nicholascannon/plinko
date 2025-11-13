@@ -1,6 +1,6 @@
 import { Application, extend } from '@pixi/react';
 import { Container, Graphics, Text } from 'pixi.js';
-import { PlinkoBoard } from './components/plinko-board';
+import { PlinkoBoard } from './components/plinko-board/plinko-board';
 
 extend({ Graphics, Container, Text });
 
