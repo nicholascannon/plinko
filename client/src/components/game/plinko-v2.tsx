@@ -37,7 +37,7 @@ function renderBoard(app: Application) {
 
   const board = generateBoard({
     rows: buckets.length,
-    spacing: app.screen.height / buckets.length - 10,
+    spacing: app.screen.width / (buckets.length + 1), // add some margin with + 1
   });
   const bucketPositions = generateBucketPositions({
     board,
