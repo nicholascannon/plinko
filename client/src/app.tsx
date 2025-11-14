@@ -1,5 +1,4 @@
-import { PlinkoGame } from './components/game/plinko-game';
-
+import { PlinkoV2 } from './components/game/plinko-v2';
 import './app.css';
 
 export function App() {
@@ -12,7 +11,7 @@ export function App() {
         alignItems: 'center',
       }}
     >
-      <PlinkoGame height={500} width={500} />
+      <PlinkoV2 height={500} width={500} />
     </div>
   );
 }
