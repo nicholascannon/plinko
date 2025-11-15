@@ -6,12 +6,17 @@ export function App() {
     <div
       style={{
         height: '100vh',
+        maxHeight: '100vh',
+        flexDirection: 'column',
+        gap: '20px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '20px',
       }}
     >
-      <PlinkoV2 height={500} width={500} />
+      <PlinkoV2 style={{ width: '500px', height: '500px' }} />
+      <button>Play</button>
     </div>
   );
 }

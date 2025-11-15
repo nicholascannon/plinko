@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { generateBoard } from './components/plinko-board/utils/board';
 import { generateBucketPositions } from './components/plinko-board/utils/buckets';
 
-export function PlinkoV2({ width, height }: { width: number; height: number }) {
+export function PlinkoV2({ style }: { style?: React.CSSProperties }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<Application | null>(null);
 
@@ -43,7 +43,7 @@ export function PlinkoV2({ width, height }: { width: number; height: number }) {
     };
   }, []);
 
-  return <canvas style={{ width, height }} ref={canvasRef}></canvas>;
+  return <canvas style={style} ref={canvasRef}></canvas>;
 }
 
 function renderBoard(app: Application) {
