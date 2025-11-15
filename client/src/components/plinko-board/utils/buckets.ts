@@ -1,20 +1,24 @@
-import type { Board } from './board';
+import type { BoardConfig } from './board';
+import type { Bucket } from './types';
 
-export function generateBucketPositions({
+export function generateBuckets({
   board,
-  buckets,
+  payouts,
 }: {
-  board: Board;
-  buckets: number[];
-}) {
-  const numBuckets = buckets.length;
+  board: BoardConfig;
+  payouts: number[];
+}): Bucket[] {
+  const numBuckets = payouts.length;
   const bucketWidth = (numBuckets - 1) * board.spacing;
   const bucketStartX = board.centerX - bucketWidth / 2;
 
-  return buckets.map((_, i) => {
+  return payouts.map((payout, i) => {
     return {
-      x: bucketStartX + i * board.spacing,
-      y: board.height - board.spacing / 2,
+      payout,
+      position: {
+        x: bucketStartX + i * board.spacing,
+        y: board.height - board.spacing / 2,
+      },
     };
   });
 }
