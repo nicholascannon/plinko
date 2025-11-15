@@ -8,6 +8,8 @@ export function PlinkoV2({ width, height }: { width: number; height: number }) {
   const appRef = useRef<Application | null>(null);
 
   useEffect(() => {
+    let mounted = false;
+
     (async () => {
       if (!canvasRef.current) return;
       if (appRef.current) return;
@@ -24,9 +26,21 @@ export function PlinkoV2({ width, height }: { width: number; height: number }) {
       });
 
       renderBoard(app);
+
+      mounted = true;
     })();
 
-    // TODO: cleanup with app.destroy doesn't work
+    return () => {
+      if (mounted) {
+        appRef.current?.destroy(false, {
+          children: true,
+          texture: true,
+          textureSource: true,
+          context: true,
+        });
+        appRef.current = null;
+      }
+    };
   }, []);
 
   return <canvas style={{ width, height }} ref={canvasRef}></canvas>;
