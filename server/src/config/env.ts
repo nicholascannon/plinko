@@ -7,6 +7,12 @@ export const CONFIG = z
     wallet: z.object({
       url: z.string(),
     }),
+    cors: z.object({
+      hosts: z
+        .string()
+        .transform((val) => val.split(',').map((s) => s.trim()))
+        .pipe(z.array(z.string())),
+    }),
     plinko: z.object({
       targetRtp: z.string().transform(Number),
       rows: z.string().transform(Number),
@@ -20,6 +26,9 @@ export const CONFIG = z
     port: process.env.PORT,
     wallet: {
       url: process.env.WALLET_URL,
+    },
+    cors: {
+      hosts: process.env.CORS_HOSTS,
     },
     plinko: {
       targetRtp: process.env.PLINKO_TARGET_RTP,

@@ -11,3 +11,4 @@ services:
       PLINKO_P: 0.5
       PLINKO_MIDDLE_PAYOUT: 0.2
       PLINKO_EDGE_PAYOUT: 100
+      CORS_HOSTS: http://localhost:5173
