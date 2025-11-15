@@ -9,6 +9,7 @@ import { PlinkoModel } from './services/plinko/model.js';
 import type { WalletClient } from './clients/wallet/client.js';
 import { walletClientErrorHandler } from './clients/wallet/error-handler.js';
 import { requestIdMiddleware } from './middleware/request-id.js';
+import { CONFIG } from './config/env.js';
 
 export function createApp({
   plinkoModel,
@@ -26,7 +27,7 @@ export function createApp({
   app.use(requestIdMiddleware);
   app.use(
     cors({
-      origin: ['http://localhost:5173'],
+      origin: CONFIG.cors.hosts,
     })
   );
   app.use(express.json({ limit: '100kb', strict: true }));
