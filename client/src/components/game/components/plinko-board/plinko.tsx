@@ -4,6 +4,8 @@ import { generateBoard } from './utils/board';
 import { generateBucketPositions } from './utils/buckets';
 import { generatePath } from './utils/path';
 
+const DISC_RADIUS = 12;
+
 export function Plinko({ style }: { style?: React.CSSProperties }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<Application | null>(null);
@@ -40,13 +42,22 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
           endPosition: bucketPositions[randomBucket],
           startingPosition: { x: board.centerX, y: 0 },
           pegs: board.pegs,
+          discRadius: DISC_RADIUS,
         });
 
-        const disc = new Graphics().circle(0, 0, 12).fill({ color: 'red' });
+        const disc = new Graphics()
+          .circle(0, 0, DISC_RADIUS)
+          .fill({ color: 'red' });
         container.addChild(disc);
 
         let step = 0;
+        let frameCount = 0;
+        const framesPerStep = 2; // Update position every 3 frames (slower animation)
         const animateDisc = () => {
+          frameCount++;
+          if (frameCount < framesPerStep) return;
+
+          frameCount = 0;
           const { x, y } = path[step];
 
           disc.x = x;

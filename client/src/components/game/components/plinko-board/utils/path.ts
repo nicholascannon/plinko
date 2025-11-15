@@ -2,15 +2,16 @@ import type { Peg } from './board';
 import type { Position } from './types';
 
 export function generatePath({
-  pegs: _pegs,
+  pegs,
   startingPosition,
   endPosition,
+  discRadius,
 }: {
   pegs: Peg[];
   startingPosition: Position;
   endPosition: Position;
+  discRadius: number;
 }): Position[] {
-  void _pegs; // Will be used for collision detection later
   const dx = endPosition.x - startingPosition.x;
   const dy = endPosition.y - startingPosition.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
