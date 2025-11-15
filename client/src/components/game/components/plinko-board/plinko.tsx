@@ -34,6 +34,8 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
         const randomBucket =
           Math.floor(Math.random() * 10) % bucketPositions.length;
 
+        console.log('PLAY', { bucket: randomBucket });
+
         const path = generatePath({
           endPosition: bucketPositions[randomBucket],
           startingPosition: { x: board.centerX, y: 0 },
