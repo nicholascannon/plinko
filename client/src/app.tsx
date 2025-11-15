@@ -1,4 +1,4 @@
-import { Plinko } from './components/game/components/plinko-board/plinko';
+import { Plinko } from './components/plinko-board/plinko';
 import './app.css';
 
 export function App() {
