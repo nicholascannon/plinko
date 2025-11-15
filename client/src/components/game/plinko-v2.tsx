@@ -9,6 +9,7 @@ export function PlinkoV2({ style }: { style?: React.CSSProperties }) {
 
   useEffect(() => {
     let mounted = false;
+    const play: (() => void) | undefined = undefined;
 
     (async () => {
       if (!canvasRef.current) return;
@@ -27,10 +28,17 @@ export function PlinkoV2({ style }: { style?: React.CSSProperties }) {
 
       renderBoard(app);
 
+      const play = () => {
+        alert('play');
+      };
+      document.addEventListener('play', play);
+
       mounted = true;
     })();
 
     return () => {
+      // Game cleanup
+      if (play) document.removeEventListener('play', play);
       if (mounted) {
         appRef.current?.destroy(false, {
           children: true,

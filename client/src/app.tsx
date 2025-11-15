@@ -16,7 +16,10 @@ export function App() {
       }}
     >
       <PlinkoV2 style={{ width: '500px', height: '500px' }} />
-      <button>Play</button>
+
+      <button onClick={() => document.dispatchEvent(new Event('play'))}>
+        Play
+      </button>
     </div>
   );
 }
