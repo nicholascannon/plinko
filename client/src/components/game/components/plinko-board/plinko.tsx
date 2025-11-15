@@ -1,4 +1,4 @@
-import { Application, Container, Graphics } from 'pixi.js';
+import { Application, Container, Graphics, Text } from 'pixi.js';
 import { useEffect, useRef } from 'react';
 import { generateBoard } from './utils/board';
 import { generateBucketPositions } from './utils/buckets';
@@ -107,11 +107,29 @@ function renderBoard(app: Application) {
     container.addChild(peg);
   });
 
-  bucketPositions.forEach(({ x, y }) => {
+  bucketPositions.forEach(({ x, y }, idx) => {
+    const bucketContainer = new Container();
+
     const bucket = new Graphics();
     bucket.circle(x, y, 15);
     bucket.fill({ color: 'yellow' });
-    container.addChild(bucket);
+
+    bucketContainer.addChild(bucket);
+
+    const text = new Text({
+      text: idx,
+      style: {
+        fontSize: 24,
+        fill: 'black',
+        fontFamily: 'Arial',
+      },
+      anchor: 0.5,
+    });
+    text.x = x;
+    text.y = y;
+    bucketContainer.addChild(text);
+
+    container.addChild(bucketContainer);
   });
 
   return { board, bucketPositions, container };
