@@ -21,14 +21,23 @@ export function generatePath({
 
   // Generate path with steps of reasonable size
   const stepSize = 5; // pixels per step
-  const numSteps = Math.ceil(distance / stepSize);
-  const path: Position[] = [];
+  const path: Position[] = [startingPosition];
 
-  for (let i = 0; i <= numSteps; i++) {
-    const t = i / numSteps;
+  let currentX = startingPosition.x;
+  let currentY = startingPosition.y;
+  let remainingDistance = distance;
+
+  while (remainingDistance > 0) {
+    const step = Math.min(stepSize, remainingDistance);
+    const t = step / distance;
+
+    currentX += dx * t;
+    currentY += dy * t;
+    remainingDistance -= step;
+
     path.push({
-      x: startingPosition.x + dx * t,
-      y: startingPosition.y + dy * t,
+      x: currentX,
+      y: currentY,
     });
   }
 
