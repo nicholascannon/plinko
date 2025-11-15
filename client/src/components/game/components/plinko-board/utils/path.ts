@@ -1,16 +1,11 @@
-import type { Peg } from './board';
 import type { Position } from './types';
 
 export function generatePath({
-  pegs,
   startingPosition,
   endPosition,
-  discRadius,
 }: {
-  pegs: Peg[];
   startingPosition: Position;
   endPosition: Position;
-  discRadius: number;
 }): Position[] {
   const dx = endPosition.x - startingPosition.x;
   const dy = endPosition.y - startingPosition.y;

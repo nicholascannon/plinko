@@ -41,8 +41,6 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
         const path = generatePath({
           endPosition: bucketPositions[randomBucket],
           startingPosition: { x: board.centerX, y: 0 },
-          pegs: board.pegs,
-          discRadius: DISC_RADIUS,
         });
 
         const disc = new Graphics()
@@ -51,13 +49,7 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
         container.addChild(disc);
 
         let step = 0;
-        let frameCount = 0;
-        const framesPerStep = 2; // Update position every 3 frames (slower animation)
         const animateDisc = () => {
-          frameCount++;
-          if (frameCount < framesPerStep) return;
-
-          frameCount = 0;
           const { x, y } = path[step];
 
           disc.x = x;
