@@ -1,5 +1,6 @@
 import type { Application } from 'express';
 import express from 'express';
+import cors from 'cors';
 import { loggingMiddleware } from './lib/logger.js';
 import { genericErrorHandler } from './middleware/generic-error-handler.js';
 import { zodErrorHandler } from './middleware/zod-error-handler.js';
@@ -23,6 +24,11 @@ export function createApp({
   const plinkoController = new PlinkoController(plinkoModel, walletClient);
 
   app.use(requestIdMiddleware);
+  app.use(
+    cors({
+      origin: ['http://localhost:5173'],
+    })
+  );
   app.use(express.json({ limit: '100kb', strict: true }));
   if (enableLogging) app.use(loggingMiddleware);
 
