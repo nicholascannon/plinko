@@ -1,5 +1,5 @@
 import type { Peg } from './board';
-import type { Direction, Position } from './types';
+import type { Position } from './types';
 
 export function generatePath({
   pegs: _pegs,
@@ -9,7 +9,7 @@ export function generatePath({
   pegs: Peg[];
   startingPosition: Position;
   endPosition: Position;
-}): Direction[] {
+}): Position[] {
   void _pegs; // Will be used for collision detection later
   const dx = endPosition.x - startingPosition.x;
   const dy = endPosition.y - startingPosition.y;
@@ -19,22 +19,16 @@ export function generatePath({
     return [];
   }
 
-  // Normalize velocity
-  const vx = dx / distance;
-  const vy = dy / distance;
-
   // Generate path with steps of reasonable size
   const stepSize = 5; // pixels per step
   const numSteps = Math.ceil(distance / stepSize);
-  const path: Direction[] = [];
+  const path: Position[] = [];
 
   for (let i = 0; i <= numSteps; i++) {
     const t = i / numSteps;
     path.push({
       x: startingPosition.x + dx * t,
       y: startingPosition.y + dy * t,
-      vx,
-      vy,
     });
   }
 

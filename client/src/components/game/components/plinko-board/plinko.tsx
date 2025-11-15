@@ -1,9 +1,10 @@
 import { Application, Container, Graphics } from 'pixi.js';
 import { useEffect, useRef } from 'react';
-import { generateBoard } from './components/plinko-board/utils/board';
-import { generateBucketPositions } from './components/plinko-board/utils/buckets';
+import { generateBoard } from './utils/board';
+import { generateBucketPositions } from './utils/buckets';
+import { generatePath } from './utils/path';
 
-export function PlinkoV2({ style }: { style?: React.CSSProperties }) {
+export function Plinko({ style }: { style?: React.CSSProperties }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<Application | null>(null);
 
@@ -26,10 +27,38 @@ export function PlinkoV2({ style }: { style?: React.CSSProperties }) {
         canvas: canvasRef.current,
       });
 
-      renderBoard(app);
+      const { container, bucketPositions, board } = renderBoard(app);
+      app.stage.addChild(container);
 
       const play = () => {
-        alert('play');
+        const randomBucket =
+          Math.floor(Math.random() * 10) % bucketPositions.length;
+
+        const path = generatePath({
+          endPosition: bucketPositions[randomBucket],
+          startingPosition: { x: board.centerX, y: 0 },
+          pegs: board.pegs,
+        });
+
+        const disc = new Graphics().circle(0, 0, 12).fill({ color: 'red' });
+        container.addChild(disc);
+
+        let step = 0;
+        const animateDisc = () => {
+          const { x, y } = path[step];
+
+          disc.x = x;
+          disc.y = y;
+
+          // stop animation when disc has completed path
+          step++;
+          if (step === path.length) {
+            app.ticker.remove(animateDisc);
+            container.removeChild(disc);
+          }
+        };
+
+        app.ticker.add(animateDisc);
       };
       document.addEventListener('play', play);
 
@@ -85,5 +114,5 @@ function renderBoard(app: Application) {
     container.addChild(bucket);
   });
 
-  app.stage.addChild(container);
+  return { board, bucketPositions, container };
 }

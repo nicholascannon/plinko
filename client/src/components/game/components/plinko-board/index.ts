@@ -1,1 +1,1 @@
-export * from './plinko-board';
+export * from './plinko';

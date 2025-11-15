@@ -1,4 +1,4 @@
-import { PlinkoV2 } from './components/game/plinko-v2';
+import { Plinko } from './components/game/components/plinko-board/plinko';
 import './app.css';
 
 export function App() {
@@ -15,7 +15,7 @@ export function App() {
         padding: '20px',
       }}
     >
-      <PlinkoV2 style={{ width: '500px', height: '500px' }} />
+      <Plinko style={{ width: '500px', height: '500px' }} />
 
       <button onClick={() => document.dispatchEvent(new Event('play'))}>
         Play
