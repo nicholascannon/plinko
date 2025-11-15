@@ -4,9 +4,15 @@ import { generateBoard } from './utils/board';
 import { generateBucketPositions } from './utils/buckets';
 import { generatePath } from './utils/path';
 
-const DISC_RADIUS = 12;
+const DISC_RADIUS = 8;
 
-export function Plinko({ style }: { style?: React.CSSProperties }) {
+export function Plinko({
+  style,
+  buckets,
+}: {
+  style?: React.CSSProperties;
+  buckets: number[];
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<Application | null>(null);
 
@@ -29,7 +35,7 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
         canvas: canvasRef.current,
       });
 
-      const { container, bucketPositions, board } = renderBoard(app);
+      const { container, bucketPositions, board } = renderBoard(app, buckets);
       app.stage.addChild(container);
 
       const play = () => {
@@ -88,12 +94,10 @@ export function Plinko({ style }: { style?: React.CSSProperties }) {
   return <canvas style={style} ref={canvasRef}></canvas>;
 }
 
-function renderBoard(app: Application) {
-  const buckets = Array.from({ length: 8 }, (_, i) => i + 1);
-
+function renderBoard(app: Application, buckets: number[]) {
   const board = generateBoard({
     rows: buckets.length,
-    spacing: app.screen.width / (buckets.length + 1), // add some margin with + 1
+    spacing: app.screen.width / (buckets.length + 4), // add some margin with + 1
   });
   const bucketPositions = generateBucketPositions({
     board,
@@ -122,9 +126,9 @@ function renderBoard(app: Application) {
     bucketContainer.addChild(bucket);
 
     const text = new Text({
-      text: idx,
+      text: buckets[idx].toFixed(1),
       style: {
-        fontSize: 24,
+        fontSize: 12,
         fill: 'black',
         fontFamily: 'Arial',
       },
