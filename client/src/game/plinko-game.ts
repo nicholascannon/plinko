@@ -10,6 +10,7 @@ export class PlinkoGame {
   private readonly canvas: HTMLCanvasElement;
   private started: boolean = false;
   private board?: Board;
+  private boundPlayHandler?: EventListener;
 
   constructor(canvas: HTMLCanvasElement) {
     this.app = new Application();
@@ -33,8 +34,9 @@ export class PlinkoGame {
     this.board.y = (this.app.screen.height - this.board.config.height) / 2;
     this.app.stage.addChild(this.board);
 
-    // @ts-expect-error TODO: figure out how to properly type custom events
-    document.addEventListener('play', this.play.bind(this));
+    // Store bound function reference for proper cleanup
+    this.boundPlayHandler = this.play.bind(this) as EventListener;
+    document.addEventListener('play', this.boundPlayHandler);
 
     this.started = true;
   }
@@ -42,8 +44,10 @@ export class PlinkoGame {
   public stop() {
     if (!this.started) return;
 
-    // @ts-expect-error TODO: figure out how to properly type custom events
-    document.removeEventListener('play', this.play.bind(this));
+    if (this.boundPlayHandler) {
+      document.removeEventListener('play', this.boundPlayHandler);
+      this.boundPlayHandler = undefined;
+    }
 
     this.app.destroy(false, {
       children: true,

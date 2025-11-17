@@ -10,6 +10,9 @@ import { generatePath } from './utils/path';
 const RADIUS = 10;
 
 export class Disc extends Graphics {
+  private animateFn?: () => void;
+  private animating: boolean = false;
+
   constructor(options?: GraphicsOptions | GraphicsContext) {
     super(options);
     this.circle(0, 0, RADIUS);
@@ -17,6 +20,9 @@ export class Disc extends Graphics {
   }
 
   public drop(app: Application, board: Board, bucketIndex: number) {
+    if (this.animating) return;
+    this.animating = true;
+
     const path = generatePath({
       startingPosition: { x: board.config.centerX, y: 0 },
       endPosition: board.buckets[bucketIndex].position,
@@ -25,7 +31,7 @@ export class Disc extends Graphics {
     board.addChild(this);
 
     let step = 0;
-    const animate = () => {
+    this.animateFn = () => {
       const { x, y } = path[step];
 
       this.x = x;
@@ -35,11 +41,17 @@ export class Disc extends Graphics {
 
       // stop animation when disc has completed path
       if (step === path.length) {
-        app.ticker.remove(animate);
+        if (this.animateFn) {
+          app.ticker.remove(this.animateFn);
+        }
         board.removeChild(this);
+
+        // destroy resources and nullify references for GC
+        this.destroy();
+        this.animateFn = undefined;
       }
     };
 
-    app.ticker.add(animate);
+    app.ticker.add(this.animateFn);
   }
 }
