@@ -4,7 +4,6 @@ import {
   type BoardConfig,
   type PegConfig,
 } from './utils/board';
-import { getBucketPositions } from './utils/buckets';
 import { Bucket } from './bucket';
 
 export class Board extends Container {
@@ -14,17 +13,16 @@ export class Board extends Container {
   constructor(payouts: number[], spacing: number) {
     super();
 
-    const rows = payouts.length;
-    this.config = generateBoardConfig({ rows, spacing });
+    this.config = generateBoardConfig({ payouts, spacing });
 
     this.width = this.config.width;
     this.height = this.config.height;
 
     this.config.pegs.forEach((config) => this.addChild(new Peg(config)));
 
-    this.buckets = getBucketPositions({ board: this.config, payouts }).map(
-      (position, i) =>
-        new Bucket(payouts[i], {
+    this.buckets = this.config.buckets.map(
+      ({ payout, position }) =>
+        new Bucket(payout, {
           x: position.x,
           y: position.y + spacing / 2, // add some space from the pegs
         })

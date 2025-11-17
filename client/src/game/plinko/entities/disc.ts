@@ -24,7 +24,7 @@ export class Disc extends Graphics {
     this.animating = true;
 
     const path = generatePath({
-      startingPosition: { x: board.config.centerX, y: 0 },
+      startingPosition: { x: board.config.width / 2, y: 0 },
       endPosition: board.buckets[bucketIndex].position,
     });
 

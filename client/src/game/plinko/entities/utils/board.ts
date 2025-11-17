@@ -1,3 +1,5 @@
+import { generateBucketConfig, type BucketConfig } from './buckets';
+
 export type PegConfig = {
   x: number;
   y: number;
@@ -6,32 +8,31 @@ export type PegConfig = {
 
 export type BoardConfig = {
   pegs: PegConfig[];
+  buckets: BucketConfig[];
+
   width: number;
   height: number;
-  centerX: number;
-  rows: number;
-  spacing: number;
 };
 
 const PEG_RADIUS = 7;
 
+const pegsInRow = (row: number) => row + 2;
+
 export function generateBoardConfig({
-  rows,
+  payouts,
   spacing,
   pegRadius = PEG_RADIUS,
 }: {
-  rows: number;
+  payouts: number[];
   spacing: number;
   pegRadius?: number;
 }): BoardConfig {
-  const pegs: PegConfig[] = [];
-
-  // first row always has 2 pegs
-  const pegsInRow = (row: number) => 3 + (row - 1);
-
+  const rows = payouts.length;
+  const height = rows * spacing;
   const width = pegsInRow(rows) * spacing;
   const centerX = width / 2;
 
+  const pegs: PegConfig[] = [];
   for (let row = 0; row < rows; row++) {
     const numPegs = pegsInRow(row);
     const rowWidth = (numPegs - 1) * spacing;
@@ -46,12 +47,17 @@ export function generateBoardConfig({
     }
   }
 
+  const buckets = generateBucketConfig({
+    boardSpacing: spacing,
+    boardHeight: height,
+    boardCenterX: centerX,
+    payouts,
+  });
+
   return {
     pegs,
+    buckets,
     width,
-    spacing,
-    height: rows * spacing,
-    centerX,
-    rows,
+    height,
   };
 }
