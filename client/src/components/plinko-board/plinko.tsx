@@ -18,14 +18,14 @@ export function Plinko({ style, payouts }: PlinkoProps) {
       if (plinkoRef.current) return;
 
       plinkoRef.current = new PlinkoUI(canvasRef.current);
-      await plinkoRef.current.init(payouts);
+      await plinkoRef.current.start(payouts);
 
       mounted = true;
     })();
 
     return () => {
       if (mounted) {
-        plinkoRef.current?.destroy();
+        plinkoRef.current?.stop();
         plinkoRef.current = null;
       }
     };
