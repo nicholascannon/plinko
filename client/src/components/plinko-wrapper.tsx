@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Plinko } from '../game';
+import { Plinko } from '../game/plinko';
 
 interface PlinkoProps {
   style?: React.CSSProperties;

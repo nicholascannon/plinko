@@ -1,5 +1,5 @@
-import { Board } from './board';
-import { Disc } from './disc';
+import { Board } from './entities/board';
+import { Disc } from './entities/disc';
 import { ResizeableGame } from '../common/resizeable-game';
 
 export class Plinko extends ResizeableGame {
