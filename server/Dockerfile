@@ -11,6 +11,7 @@ COPY tsconfig.json .
 # TODO: ORM coming soon
 # COPY drizzle.config.ts .
 # COPY ./drizzle ./drizzle
+COPY vitest.config.ts .
 COPY ./src ./src
 
 RUN npm run build
