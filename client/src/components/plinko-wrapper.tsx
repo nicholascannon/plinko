@@ -17,8 +17,8 @@ export function PlinkoWrapper({ style, payouts }: PlinkoProps) {
       if (!canvasRef.current) return;
       if (plinkoRef.current) return;
 
-      plinkoRef.current = new Plinko(canvasRef.current);
-      await plinkoRef.current.start(payouts);
+      plinkoRef.current = new Plinko(canvasRef.current, payouts);
+      await plinkoRef.current.start();
 
       mounted = true;
     })();

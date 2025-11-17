@@ -1,47 +1,20 @@
-import { Application } from 'pixi.js';
 import { Board } from './board';
 import { Disc } from './disc';
+import { ResizeableGame } from '../common/resizeable-game';
 
-/**
- * The Pixi Plinko Game.
- */
-export class Plinko {
-  private readonly app: Application;
-  private readonly canvas: HTMLCanvasElement;
-  private started: boolean = false;
-
-  private baseWidth: number;
-  private baseHeight: number;
-  private resizeObserver?: ResizeObserver;
-
+export class Plinko extends ResizeableGame {
   private board?: Board;
   private boundPlayHandler?: EventListener;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.app = new Application();
-    this.canvas = canvas;
-
-    // Capture initial canvas size as base resolution
-    const rect = this.canvas.getBoundingClientRect();
-    this.baseWidth = rect.width;
-    this.baseHeight = rect.height;
+  constructor(canvas: HTMLCanvasElement, private readonly payouts: number[]) {
+    super(canvas);
   }
 
-  public async start(payouts: number[]) {
-    await this.app.init({
-      autoStart: true,
-      antialias: true,
-      resolution: window.devicePixelRatio,
-      width: this.baseWidth,
-      height: this.baseHeight,
-      canvas: this.canvas,
-    });
+  public async start() {
+    await super.start();
 
-    // Setup resize observer to handle canvas size changes
-    this.setupResizeObserver();
-
-    const boardSpacing = this.baseWidth / (payouts.length + 4); // add some margin
-    this.board = new Board(payouts, boardSpacing);
+    const boardSpacing = this.baseWidth / (this.payouts.length + 4); // add some margin
+    this.board = new Board(this.payouts, boardSpacing);
 
     // center the board on stage using base resolution
     this.board.x = (this.baseWidth - this.board.config.width) / 2;
@@ -63,47 +36,8 @@ export class Plinko {
       this.boundPlayHandler = undefined;
     }
 
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-      this.resizeObserver = undefined;
-    }
-
-    this.app.destroy(false, {
-      children: true,
-      texture: true,
-      textureSource: true,
-      context: true,
-    });
-  }
-
-  private setupResizeObserver() {
-    this.resizeObserver = new ResizeObserver(() => {
-      this.handleResize();
-    });
-    this.resizeObserver.observe(this.canvas);
-  }
-
-  private handleResize() {
-    const rect = this.canvas.getBoundingClientRect();
-    const newWidth = rect.width;
-    const newHeight = rect.height;
-
-    // Calculate scale factor maintaining aspect ratio
-    const scaleX = newWidth / this.baseWidth;
-    const scaleY = newHeight / this.baseHeight;
-    const scale = Math.min(scaleX, scaleY);
-
-    // Update renderer size to actual canvas size
-    this.app.renderer.resize(newWidth, newHeight);
-
-    // Apply scale to stage
-    this.app.stage.scale.set(scale);
-
-    // Center the stage if letterboxing/pillarboxing occurs
-    const scaledWidth = this.baseWidth * scale;
-    const scaledHeight = this.baseHeight * scale;
-    this.app.stage.x = (newWidth - scaledWidth) / 2;
-    this.app.stage.y = (newHeight - scaledHeight) / 2;
+    super.stop();
+    this.started = false;
   }
 
   private play(e: CustomEvent) {
