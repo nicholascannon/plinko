@@ -1,6 +1,6 @@
 import { Graphics } from 'pixi.js';
 import { Container, Text } from 'pixi.js';
-import type { Position } from './utils/types';
+import type { Position } from '../../game/utils/types';
 
 export class Bucket {
   public readonly container: Container;

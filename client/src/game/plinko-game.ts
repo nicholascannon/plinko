@@ -2,8 +2,10 @@ import { Application } from 'pixi.js';
 import { Board } from './board';
 import { Disc } from './disc';
 
-// TODO: name this better
-export class PlinkoUI {
+/**
+ * The Pixi Plinko Game.
+ */
+export class PlinkoGame {
   private readonly app: Application;
   private readonly canvas: HTMLCanvasElement;
   private started: boolean = false;
