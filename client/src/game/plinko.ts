@@ -5,7 +5,7 @@ import { Disc } from './disc';
 /**
  * The Pixi Plinko Game.
  */
-export class PlinkoGame {
+export class Plinko {
   private readonly app: Application;
   private readonly canvas: HTMLCanvasElement;
   private started: boolean = false;

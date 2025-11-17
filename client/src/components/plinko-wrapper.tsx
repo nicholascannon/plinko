@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { PlinkoGame } from '../game';
+import { Plinko } from '../game';
 
 interface PlinkoProps {
   style?: React.CSSProperties;
@@ -8,7 +8,7 @@ interface PlinkoProps {
 
 export function PlinkoWrapper({ style, payouts }: PlinkoProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const plinkoRef = useRef<PlinkoGame | null>(null);
+  const plinkoRef = useRef<Plinko | null>(null);
 
   useEffect(() => {
     let mounted = false;
@@ -17,7 +17,7 @@ export function PlinkoWrapper({ style, payouts }: PlinkoProps) {
       if (!canvasRef.current) return;
       if (plinkoRef.current) return;
 
-      plinkoRef.current = new PlinkoGame(canvasRef.current);
+      plinkoRef.current = new Plinko(canvasRef.current);
       await plinkoRef.current.start(payouts);
 
       mounted = true;

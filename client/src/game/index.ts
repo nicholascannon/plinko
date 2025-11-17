@@ -1,1 +1,1 @@
-export { PlinkoGame } from './plinko-game';
+export { Plinko } from './plinko';
