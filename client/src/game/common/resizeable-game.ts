@@ -1,4 +1,9 @@
-import { Application } from 'pixi.js';
+import {
+  Application,
+  type ApplicationOptions,
+  type DestroyOptions,
+  type RendererDestroyOptions,
+} from 'pixi.js';
 import type { Game } from './game';
 
 export class ResizeableGame implements Game {
@@ -17,23 +22,24 @@ export class ResizeableGame implements Game {
     this.baseHeight = height;
   }
 
-  public async start(): Promise<void> {
+  public async start(options?: Partial<ApplicationOptions>): Promise<void> {
     await this.app.init({
-      autoStart: true,
-      antialias: true,
-      resolution: window.devicePixelRatio,
+      ...options,
+      // always override these options
       width: this.baseWidth,
       height: this.baseHeight,
       canvas: this.canvas,
     });
 
-    // Setup resize observer to handle canvas size changes
     this.setupResizeObserver();
 
     // NOTE: do not set this.started to true here, it is done in the subclass
   }
 
-  public stop(): void {
+  public stop(
+    rendererDestroyOptions?: RendererDestroyOptions,
+    pixiDestroyOptions?: DestroyOptions
+  ): void {
     if (!this.started) return;
 
     if (this.resizeObserver) {
@@ -41,12 +47,7 @@ export class ResizeableGame implements Game {
       this.resizeObserver = undefined;
     }
 
-    this.app.destroy(false, {
-      children: true,
-      texture: true,
-      textureSource: true,
-      context: true,
-    });
+    this.app.destroy(rendererDestroyOptions, pixiDestroyOptions);
   }
 
   private setupResizeObserver() {
@@ -66,10 +67,7 @@ export class ResizeableGame implements Game {
     const scaleY = newHeight / this.baseHeight;
     const scale = Math.min(scaleX, scaleY);
 
-    // Update renderer size to actual canvas size
     this.app.renderer.resize(newWidth, newHeight);
-
-    // Apply scale to stage
     this.app.stage.scale.set(scale);
 
     // Center the stage if letterboxing/pillarboxing occurs

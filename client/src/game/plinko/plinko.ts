@@ -19,7 +19,11 @@ export class Plinko extends ResizeableGame {
   }
 
   public async start() {
-    await super.start();
+    await super.start({
+      autoStart: true,
+      antialias: true,
+      resolution: window.devicePixelRatio,
+    });
 
     this.app.stage.addChild(this.board);
 
@@ -38,7 +42,12 @@ export class Plinko extends ResizeableGame {
       this.boundPlayHandler = undefined;
     }
 
-    super.stop();
+    super.stop(false, {
+      children: true,
+      texture: true,
+      textureSource: true,
+      context: true,
+    });
     this.started = false;
   }
 
