@@ -1,21 +1,15 @@
-import { Graphics } from 'pixi.js';
+import { Graphics, type ContainerChild, type ContainerOptions } from 'pixi.js';
 import { Container, Text } from 'pixi.js';
-import type { Position } from '../../game/utils/types';
 
-export class Bucket {
-  public readonly container: Container;
-
+export class Bucket extends Container {
   constructor(
     public readonly payout: number,
-    public readonly position: Position
+    options?: ContainerOptions<ContainerChild>
   ) {
-    this.container = new Container();
+    super(options);
 
-    const bucket = new Graphics();
-    bucket.circle(this.position.x, this.position.y, 15);
-    bucket.fill({ color: 'yellow' });
-
-    this.container.addChild(bucket);
+    const bucket = new Graphics().circle(0, 0, 20).fill({ color: 'yellow' });
+    this.addChild(bucket);
 
     const text = new Text({
       text: payout.toFixed(1),
@@ -25,9 +19,9 @@ export class Bucket {
         fontFamily: 'Arial',
       },
       anchor: 0.5,
+      x: 0,
+      y: 0,
     });
-    text.x = this.position.x;
-    text.y = this.position.y;
-    this.container.addChild(text);
+    this.addChild(text);
   }
 }

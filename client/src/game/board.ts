@@ -1,26 +1,26 @@
 import { Container, Graphics } from 'pixi.js';
-import { generateBoardConfig, type BoardConfig } from './utils/board';
+import {
+  generateBoardConfig,
+  type BoardConfig,
+  type PegConfig,
+} from './utils/board';
 import { getBucketPositions } from './utils/buckets';
 import { Bucket } from './bucket';
 
-export class Board {
-  public readonly container: Container;
+export class Board extends Container {
   public readonly buckets: Bucket[];
-
   public readonly config: BoardConfig;
 
   constructor(payouts: number[], spacing: number) {
+    super();
+
     const rows = payouts.length;
     this.config = generateBoardConfig({ rows, spacing });
 
-    this.container = new Container();
+    this.width = this.config.width;
+    this.height = this.config.height;
 
-    this.config.pegs.forEach(({ x, y, radius }) => {
-      const peg = new Graphics();
-      peg.circle(x, y, radius);
-      peg.fill({ color: 'white' });
-      this.container.addChild(peg);
-    });
+    this.config.pegs.forEach((config) => this.addChild(new Peg(config)));
 
     this.buckets = getBucketPositions({ board: this.config, payouts }).map(
       (position, i) =>
@@ -29,6 +29,14 @@ export class Board {
           y: position.y + spacing / 2, // add some space from the pegs
         })
     );
-    this.buckets.forEach((bucket) => this.container.addChild(bucket.container));
+    this.buckets.forEach((bucket) => this.addChild(bucket));
+  }
+}
+
+class Peg extends Graphics {
+  constructor(public readonly config: PegConfig) {
+    super();
+    this.circle(config.x, config.y, config.radius);
+    this.fill({ color: 'white' });
   }
 }

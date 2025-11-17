@@ -1,11 +1,11 @@
-export type Peg = {
+export type PegConfig = {
   x: number;
   y: number;
   radius: number;
 };
 
 export type BoardConfig = {
-  pegs: Peg[];
+  pegs: PegConfig[];
   width: number;
   height: number;
   centerX: number;
@@ -24,7 +24,7 @@ export function generateBoardConfig({
   spacing: number;
   pegRadius?: number;
 }): BoardConfig {
-  const pegs: Peg[] = [];
+  const pegs: PegConfig[] = [];
 
   // first row always has 2 pegs
   const pegsInRow = (row: number) => 3 + (row - 1);

@@ -29,11 +29,9 @@ export class PlinkoGame {
     this.board = new Board(payouts, boardSpacing);
 
     // center the board on stage
-    this.board.container.x =
-      (this.app.screen.width - this.board.config.width) / 2;
-    this.board.container.y =
-      (this.app.screen.height - this.board.config.height) / 2;
-    this.app.stage.addChild(this.board.container);
+    this.board.x = (this.app.screen.width - this.board.config.width) / 2;
+    this.board.y = (this.app.screen.height - this.board.config.height) / 2;
+    this.app.stage.addChild(this.board);
 
     // @ts-expect-error TODO: figure out how to properly type custom events
     document.addEventListener('play', this.play.bind(this));

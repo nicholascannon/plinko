@@ -1,14 +1,19 @@
-import { Application, Graphics } from 'pixi.js';
+import {
+  Application,
+  Graphics,
+  GraphicsContext,
+  type GraphicsOptions,
+} from 'pixi.js';
 import type { Board } from './board';
 import { generatePath } from './utils/path';
 
 const RADIUS = 10;
 
-export class Disc {
-  private readonly graphic: Graphics;
-
-  constructor() {
-    this.graphic = new Graphics().circle(0, 0, RADIUS).fill({ color: 'red' });
+export class Disc extends Graphics {
+  constructor(options?: GraphicsOptions | GraphicsContext) {
+    super(options);
+    this.circle(0, 0, RADIUS);
+    this.fill({ color: 'red' });
   }
 
   public drop(app: Application, board: Board, bucketIndex: number) {
@@ -17,21 +22,21 @@ export class Disc {
       endPosition: board.buckets[bucketIndex].position,
     });
 
-    board.container.addChild(this.graphic);
+    board.addChild(this);
 
     let step = 0;
     const animate = () => {
       const { x, y } = path[step];
 
-      this.graphic.x = x;
-      this.graphic.y = y;
+      this.x = x;
+      this.y = y;
 
       step++;
 
       // stop animation when disc has completed path
       if (step === path.length) {
         app.ticker.remove(animate);
-        board.container.removeChild(this.graphic);
+        board.removeChild(this);
       }
     };
 
