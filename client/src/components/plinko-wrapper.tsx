@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { Plinko } from '../game/plinko';
 
-interface PlinkoProps {
+interface PlinkoWrapperProps {
   style?: React.CSSProperties;
   payouts: number[];
 }
 
-export function PlinkoWrapper({ style, payouts }: PlinkoProps) {
+export function PlinkoWrapper({ style, payouts }: PlinkoWrapperProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const plinkoRef = useRef<Plinko | null>(null);
 
