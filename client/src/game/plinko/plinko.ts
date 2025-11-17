@@ -3,22 +3,24 @@ import { Disc } from './entities/disc';
 import { ResizeableGame } from '../common/resizeable-game';
 
 export class Plinko extends ResizeableGame {
-  private board?: Board;
+  private board: Board;
   private boundPlayHandler?: EventListener;
 
   constructor(canvas: HTMLCanvasElement, private readonly payouts: number[]) {
     super(canvas);
+
+    const boardSpacing = this.baseWidth / (this.payouts.length + 4); // add some margin
+    this.board = new Board(this.payouts, boardSpacing);
+    // center the board on stage
+    this.board.position.set(
+      (this.baseWidth - this.board.config.width) / 2,
+      (this.baseHeight - this.board.config.height) / 2
+    );
   }
 
   public async start() {
     await super.start();
 
-    const boardSpacing = this.baseWidth / (this.payouts.length + 4); // add some margin
-    this.board = new Board(this.payouts, boardSpacing);
-
-    // center the board on stage using base resolution
-    this.board.x = (this.baseWidth - this.board.config.width) / 2;
-    this.board.y = (this.baseHeight - this.board.config.height) / 2;
     this.app.stage.addChild(this.board);
 
     // Store bound function reference for proper cleanup
@@ -41,8 +43,6 @@ export class Plinko extends ResizeableGame {
   }
 
   private play(e: CustomEvent) {
-    if (!this.board) return; // TODO: log something here?
-
     const bucketIndex = e.detail.bucket;
     console.log('PLAY', { bucket: bucketIndex });
 
