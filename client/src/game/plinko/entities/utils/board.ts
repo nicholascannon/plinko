@@ -14,18 +14,14 @@ export type BoardConfig = {
   height: number;
 };
 
-const PEG_RADIUS = 7;
-
 const pegsInRow = (row: number) => row + 2;
 
 export function generateBoardConfig({
   payouts,
   spacing,
-  pegRadius = PEG_RADIUS,
 }: {
   payouts: number[];
   spacing: number;
-  pegRadius?: number;
 }): BoardConfig {
   const rows = payouts.length;
   const height = rows * spacing;
@@ -42,7 +38,7 @@ export function generateBoardConfig({
       pegs.push({
         x: rowStartX + peg * spacing,
         y: row * spacing,
-        radius: pegRadius,
+        radius: spacing * 0.1,
       });
     }
   }

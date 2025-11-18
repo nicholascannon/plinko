@@ -22,7 +22,7 @@ export class Board extends Container {
 
     this.buckets = this.config.buckets.map(
       ({ payout, position }) =>
-        new Bucket(payout, {
+        new Bucket(payout, spacing * 0.75, {
           x: position.x,
           y: position.y + spacing / 2, // add some space from the pegs
         })

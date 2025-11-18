@@ -12,12 +12,12 @@ export class Bucket extends Container {
 
   constructor(
     public readonly payout: number,
+    size: number,
     options?: ContainerOptions<ContainerChild>
   ) {
     super(options);
 
-    const size = 40;
-    const cornerRadius = 2;
+    const cornerRadius = size * 0.1;
     const bucket = new Graphics()
       .roundRect(-size / 2, -size / 2, size, size, cornerRadius)
       .fill({ color: 'yellow' });
