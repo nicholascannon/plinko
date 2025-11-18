@@ -16,7 +16,11 @@ export class Bucket extends Container {
   ) {
     super(options);
 
-    const bucket = new Graphics().circle(0, 0, 20).fill({ color: 'yellow' });
+    const size = 40;
+    const cornerRadius = 2;
+    const bucket = new Graphics()
+      .roundRect(-size / 2, -size / 2, size, size, cornerRadius)
+      .fill({ color: 'yellow' });
     this.addChild(bucket);
 
     const text = new Text({
@@ -38,10 +42,10 @@ export class Bucket extends Container {
 
     // Use a spring-like bounce with easing for a smoother, more natural effect
     // Parameters for "spring" animation
-    const duration = 32; // frames for the full bounce (up + down)
+    const duration = 20; // frames for the full bounce (up + down)
     let frame = 0;
     const baseY = this.y;
-    const amplitude = 10;
+    const amplitude = 8;
     const damping = 0.32; // "squash" effect
 
     this.animateFn = () => {
