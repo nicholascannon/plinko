@@ -42,10 +42,10 @@ export class Bucket extends Container {
 
     // Use a spring-like bounce with easing for a smoother, more natural effect
     // Parameters for "spring" animation
-    const duration = 20; // frames for the full bounce (up + down)
+    const duration = 18; // frames for the full bounce (up + down)
     let frame = 0;
     const baseY = this.y;
-    const amplitude = 8;
+    const amplitude = 5;
     const damping = 0.32; // "squash" effect
 
     this.animateFn = () => {
@@ -56,7 +56,7 @@ export class Bucket extends Container {
       // Out-and-back ease, damped, single cycle
       // y(t) = startY - amplitude * (1 - e^{-damping*t}) * sin(π * t)
       const easedBounce =
-        baseY -
+        baseY +
         amplitude *
           (1 - Math.exp(-damping * t * 7)) * // 7 makes it snappier
           Math.sin(Math.PI * t);
