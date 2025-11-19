@@ -1,5 +1,4 @@
 import {
-  Application,
   Graphics,
   Ticker,
   type ContainerChild,
@@ -8,7 +7,7 @@ import {
 import { Container, Text } from 'pixi.js';
 
 export class Bucket extends Container {
-  private animateFn?: (ticker: Ticker) => void;
+  private animateFn?: () => void;
 
   constructor(
     public readonly payout: number,
@@ -35,9 +34,11 @@ export class Bucket extends Container {
       y: 0,
     });
     this.addChild(text);
+
+    this.on('bounce', this.handleBounce, this);
   }
 
-  public bounce(app: Application) {
+  private handleBounce() {
     if (this.animateFn) return;
 
     // Use a spring-like bounce with easing for a smoother, more natural effect
@@ -67,12 +68,12 @@ export class Bucket extends Container {
       if (t >= 1) {
         this.y = baseY;
         if (this.animateFn) {
-          app.ticker.remove(this.animateFn);
+          Ticker.shared.remove(this.animateFn);
         }
         this.animateFn = undefined;
       }
     };
 
-    app.ticker.add(this.animateFn);
+    Ticker.shared.add(this.animateFn);
   }
 }

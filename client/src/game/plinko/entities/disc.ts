@@ -1,7 +1,7 @@
 import {
-  Application,
   Graphics,
   GraphicsContext,
+  Ticker,
   type GraphicsOptions,
 } from 'pixi.js';
 import type { Board } from './board';
@@ -18,7 +18,7 @@ export class Disc extends Graphics {
     this.fill({ color: 'red' });
   }
 
-  public drop(app: Application, board: Board, bucketIndex: number) {
+  public drop(board: Board, bucketIndex: number) {
     if (this.animateFn) return;
 
     const bucket = board.buckets[bucketIndex];
@@ -40,10 +40,11 @@ export class Disc extends Graphics {
 
       // stop animation when disc has completed path
       if (step === path.length) {
-        bucket.bounce(app);
+        // Emit event to trigger bucket bounce
+        bucket.emit('bounce');
 
         if (this.animateFn) {
-          app.ticker.remove(this.animateFn);
+          Ticker.shared.remove(this.animateFn);
         }
         board.removeChild(this);
 
@@ -53,6 +54,6 @@ export class Disc extends Graphics {
       }
     };
 
-    app.ticker.add(this.animateFn);
+    Ticker.shared.add(this.animateFn);
   }
 }
