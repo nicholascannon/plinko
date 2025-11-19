@@ -55,6 +55,14 @@ export class Disc extends Graphics {
         board.removeChild(this);
         this.destroy();
         this.animation = undefined;
+
+        document.dispatchEvent(
+          new CustomEvent('playFinish', {
+            detail: {
+              // TODO: add detail here?
+            },
+          })
+        );
       },
     });
     this.animation = tl;

@@ -2,6 +2,7 @@ import { PlinkoWrapper } from './components/plinko-wrapper';
 import { usePlay } from './hooks/use-play';
 import { useWallet } from './hooks/use-wallet';
 import { useGameConfig } from './hooks/use-game-config';
+import { useEffect } from 'react';
 
 import './app.css';
 
@@ -15,6 +16,15 @@ export function App() {
     refetch: refetchWallet,
   } = useWallet(WALLET_ID);
   const { mutate: play } = usePlay();
+
+  useEffect(() => {
+    const playFinish = () => refetchWallet();
+    document.addEventListener('playFinish', playFinish);
+
+    return () => {
+      document.removeEventListener('playFinish', playFinish);
+    };
+  }, [refetchWallet]);
 
   if (loadingGameConfig || walletLoading) return <h1>Loading...</h1>;
 
@@ -49,7 +59,6 @@ export function App() {
                     },
                   })
                 );
-                refetchWallet();
               },
             }
           );
