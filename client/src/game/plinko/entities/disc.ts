@@ -2,6 +2,13 @@ import { Graphics, GraphicsContext, type GraphicsOptions } from 'pixi.js';
 import { gsap } from 'gsap';
 import type { Board } from './board';
 
+const FALL_DURATION_BASE = 0.08;
+const FALL_DURATION_RANDOM = 0.02;
+const BOUNCE_DURATION_BASE = 0.15;
+const BOUNCE_DURATION_RANDOM = 0.05;
+const BOUNCE_HEIGHT_FACTOR = 0.3;
+const FINAL_DROP_DURATION = 0.15;
+
 export class Disc extends Graphics {
   private animation?: gsap.core.Timeline;
 
@@ -64,14 +71,15 @@ export class Disc extends Graphics {
       tl.to(this, {
         x: currentX, // Fall straight down
         y: collisionY,
-        duration: 0.08 + Math.random() * 0.02,
+        duration: FALL_DURATION_BASE + Math.random() * FALL_DURATION_RANDOM,
         ease: 'power2.in',
       });
 
       // 2. Bounce to next gap (Parabolic Arc)
       // Split into two parts: Up (to peak) and Down (to next gap)
-      const bounceDuration = 0.15 + Math.random() * 0.05;
-      const bounceHeight = spacing * 0.3;
+      const bounceDuration =
+        BOUNCE_DURATION_BASE + Math.random() * BOUNCE_DURATION_RANDOM;
+      const bounceHeight = spacing * BOUNCE_HEIGHT_FACTOR;
       const midX = (currentX + nextX) / 2;
       const peakY = collisionY - bounceHeight;
 
@@ -101,7 +109,7 @@ export class Disc extends Graphics {
     tl.to(this, {
       x: targetBucket.position.x,
       y: targetBucket.position.y,
-      duration: 0.15,
+      duration: FINAL_DROP_DURATION,
       ease: 'bounce.out',
     });
   }
