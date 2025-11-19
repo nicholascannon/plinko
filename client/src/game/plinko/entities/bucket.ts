@@ -21,7 +21,7 @@ export class Bucket extends Container {
     const text = new Text({
       text: payout.toFixed(1),
       style: {
-        fontSize: 12,
+        fontSize: size * 0.35,
         fill: 'black',
         fontFamily: 'Arial',
       },

@@ -7,6 +7,7 @@ export type PegConfig = {
 };
 
 export type BoardConfig = {
+  spacing: number;
   pegs: PegConfig[];
   buckets: BucketConfig[];
 
@@ -51,6 +52,7 @@ export function generateBoardConfig({
   });
 
   return {
+    spacing,
     pegs,
     buckets,
     width,

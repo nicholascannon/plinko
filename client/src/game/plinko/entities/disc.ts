@@ -2,14 +2,12 @@ import { Graphics, GraphicsContext, type GraphicsOptions } from 'pixi.js';
 import { gsap } from 'gsap';
 import type { Board } from './board';
 
-const RADIUS = 10;
-
 export class Disc extends Graphics {
   private animation?: gsap.core.Tween;
 
-  constructor(options?: GraphicsOptions | GraphicsContext) {
+  constructor(radius: number, options?: GraphicsOptions | GraphicsContext) {
     super(options);
-    this.circle(0, 0, RADIUS);
+    this.circle(0, 0, radius);
     this.fill({ color: 'red' });
   }
 

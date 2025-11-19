@@ -55,7 +55,7 @@ export class Plinko extends ResizeableGame {
     const bucketIndex = e.detail.bucket;
     console.log('PLAY', { bucket: bucketIndex });
 
-    const disc = new Disc();
+    const disc = new Disc(this.board.config.spacing / 4);
     disc.drop(this.board, bucketIndex);
   }
 }
