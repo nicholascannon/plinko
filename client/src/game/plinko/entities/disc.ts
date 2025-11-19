@@ -1,16 +1,11 @@
-import {
-  Graphics,
-  GraphicsContext,
-  Ticker,
-  type GraphicsOptions,
-} from 'pixi.js';
+import { Graphics, GraphicsContext, type GraphicsOptions } from 'pixi.js';
+import { gsap } from 'gsap';
 import type { Board } from './board';
-import { generatePath } from './utils/path';
 
 const RADIUS = 10;
 
 export class Disc extends Graphics {
-  private animateFn?: () => void;
+  private animation?: gsap.core.Tween;
 
   constructor(options?: GraphicsOptions | GraphicsContext) {
     super(options);
@@ -19,41 +14,36 @@ export class Disc extends Graphics {
   }
 
   public drop(board: Board, bucketIndex: number) {
-    if (this.animateFn) return;
+    if (this.animation) return;
 
     const bucket = board.buckets[bucketIndex];
-    const path = generatePath({
-      startingPosition: { x: board.config.width / 2, y: 0 },
-      endPosition: bucket.position,
-    });
+
+    // TODO: we don't really need the path but we need a more realistic animation later
+    // const path = generatePath({
+    //   startingPosition: { x: board.config.width / 2, y: 0 },
+    //   endPosition: bucket.position,
+    // });
 
     board.addChild(this);
 
-    let step = 0;
-    this.animateFn = () => {
-      const { x, y } = path[step];
+    // Set initial position
+    this.x = board.config.width / 2;
+    this.y = 0;
 
-      this.x = x;
-      this.y = y;
+    this.animation = gsap.to(this, {
+      x: bucket.position.x,
+      y: bucket.position.y,
+      duration: 1,
+      ease: 'none',
+      onComplete: () => {
+        bucket.bounce();
 
-      step++;
-
-      // stop animation when disc has completed path
-      if (step === path.length) {
-        // Emit event to trigger bucket bounce
-        bucket.emit('bounce');
-
-        if (this.animateFn) {
-          Ticker.shared.remove(this.animateFn);
-        }
         board.removeChild(this);
 
         // destroy resources and nullify references for GC
         this.destroy();
-        this.animateFn = undefined;
-      }
-    };
-
-    Ticker.shared.add(this.animateFn);
+        this.animation = undefined;
+      },
+    });
   }
 }

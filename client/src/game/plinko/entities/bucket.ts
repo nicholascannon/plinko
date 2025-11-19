@@ -1,13 +1,9 @@
-import {
-  Graphics,
-  Ticker,
-  type ContainerChild,
-  type ContainerOptions,
-} from 'pixi.js';
+import { Graphics, type ContainerChild, type ContainerOptions } from 'pixi.js';
 import { Container, Text } from 'pixi.js';
+import { gsap } from 'gsap';
 
 export class Bucket extends Container {
-  private animateFn?: () => void;
+  private animation?: gsap.core.Tween;
 
   constructor(
     public readonly payout: number,
@@ -34,46 +30,25 @@ export class Bucket extends Container {
       y: 0,
     });
     this.addChild(text);
-
-    this.on('bounce', this.handleBounce, this);
   }
 
-  private handleBounce() {
-    if (this.animateFn) return;
+  public bounce() {
+    if (this.animation) return;
 
-    // Use a spring-like bounce with easing for a smoother, more natural effect
-    // Parameters for "spring" animation
-    const duration = 18; // frames for the full bounce (up + down)
-    let frame = 0;
     const baseY = this.y;
     const amplitude = 5;
-    const damping = 0.32; // "squash" effect
+    const duration = 0.1; // seconds
 
-    this.animateFn = () => {
-      frame++;
-      // Normalized time [0, 1]
-      const t = Math.min(frame / duration, 1);
-
-      // Out-and-back ease, damped, single cycle
-      // y(t) = startY - amplitude * (1 - e^{-damping*t}) * sin(π * t)
-      const easedBounce =
-        baseY +
-        amplitude *
-          (1 - Math.exp(-damping * t * 7)) * // 7 makes it snappier
-          Math.sin(Math.PI * t);
-
-      this.y = easedBounce;
-
-      // End when returning to startY (after 1 cycle)
-      if (t >= 1) {
+    this.animation = gsap.to(this, {
+      y: baseY + amplitude,
+      duration,
+      ease: 'power2.out',
+      yoyo: true,
+      repeat: 1,
+      onComplete: () => {
         this.y = baseY;
-        if (this.animateFn) {
-          Ticker.shared.remove(this.animateFn);
-        }
-        this.animateFn = undefined;
-      }
-    };
-
-    Ticker.shared.add(this.animateFn);
+        this.animation = undefined;
+      },
+    });
   }
 }
