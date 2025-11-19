@@ -33,7 +33,7 @@ export function App() {
     >
       <PlinkoWrapper
         payouts={gameConfig.payouts}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '650px', height: '650px' }}
       />
 
       <button
