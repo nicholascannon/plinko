@@ -10,13 +10,13 @@ export function App() {
   if (loadingGameConfig || !wallet?.balance) return <h1>Loading...</h1>;
 
   return (
-    <div className="flex flex-col h-screen max-h-screen gap-2 items-center p-4">
+    <div className="flex flex-col h-screen max-h-screen gap-4 items-center p-4">
       <div className="flex items-center justify-center w-full">
         <h1 className="text-2xl">${wallet.balance}</h1>
       </div>
 
-      <div className="flex-1 flex flex-col-reverse gap-2 justify-between items-center lg:flex-row lg:items-stretch">
-        <Controller className="w-full flex-1 lg:min-w-[400px]" />
+      <div className="w-full flex-1 flex flex-col-reverse gap-2 justify-evenly items-center md:flex-row md:items-start">
+        <Controller className="w-full md:max-w-[400px] flex-1" />
 
         <PlinkoWrapper
           payouts={gameConfig.payouts}
