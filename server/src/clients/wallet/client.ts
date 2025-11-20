@@ -2,32 +2,29 @@ import { LOGGER } from '../../lib/logger.js';
 import { HttpWalletClientError } from './errors.js';
 
 export interface WalletClient {
-  getBalance: (id: string, requestId: string) => Promise<{ balance: number }>;
+  getBalance: (id: string, requestId: string) => Promise<{ balance: string }>;
   credit: (
     id: string,
     amount: number,
     requestId: string
-  ) => Promise<{ balance: number; transactionId: string }>;
+  ) => Promise<{ balance: string; transactionId: string }>;
   debit: (
     id: string,
     amount: number,
     requestId: string
-  ) => Promise<{ balance: number; transactionId: string }>;
+  ) => Promise<{ balance: string; transactionId: string }>;
 }
 
 export class HttpWalletClient implements WalletClient {
   constructor(private readonly baseUrl: string) {}
 
-  public async getBalance(
-    id: string,
-    requestId: string
-  ): Promise<{ balance: number }> {
+  public async getBalance(id: string, requestId: string) {
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}`, {
       headers: {
         'X-Request-Id': requestId,
       },
     });
-    return response.json() as Promise<{ balance: number }>;
+    return response.json() as Promise<{ balance: string }>;
   }
 
   public async handleError(
@@ -76,11 +73,7 @@ export class HttpWalletClient implements WalletClient {
     LOGGER.info('Wallet operation', { id, operation, requestId });
   }
 
-  public async credit(
-    id: string,
-    amount: number,
-    requestId: string
-  ): Promise<{ balance: number; transactionId: string }> {
+  public async credit(id: string, amount: number, requestId: string) {
     this.logRequest(id, 'credit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/credit`, {
       method: 'POST',
@@ -96,16 +89,12 @@ export class HttpWalletClient implements WalletClient {
     }
 
     return response.json() as Promise<{
-      balance: number;
+      balance: string;
       transactionId: string;
     }>;
   }
 
-  public async debit(
-    id: string,
-    amount: number,
-    requestId: string
-  ): Promise<{ balance: number; transactionId: string }> {
+  public async debit(id: string, amount: number, requestId: string) {
     this.logRequest(id, 'debit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/debit`, {
       method: 'POST',
@@ -121,7 +110,7 @@ export class HttpWalletClient implements WalletClient {
     }
 
     return response.json() as Promise<{
-      balance: number;
+      balance: string;
       transactionId: string;
     }>;
   }
