@@ -1,19 +1,15 @@
 import { PlinkoWrapper } from './components/plinko-wrapper';
-import { usePlay } from './hooks/use-play';
 import { useWallet } from './hooks/use-wallet';
 import { useGameConfig } from './hooks/use-game-config';
 import { useEffect, useState } from 'react';
-import { dispatchPlayEvent } from './events/play-event';
 import { PlayFinishEvent } from './events/play-finish-event';
-
-import './app.css';
+import { Controller } from './components/controller';
 
 const WALLET_ID = '4bcaf50f-7c95-4f97-9a08-fbaddf966cb9';
 
 export function App() {
   const { data: gameConfig, isLoading: loadingGameConfig } = useGameConfig();
   const { data: wallet } = useWallet(WALLET_ID);
-  const { mutate: play } = usePlay();
 
   const [balance, setBalance] = useState<number | undefined>(undefined);
 
@@ -55,25 +51,14 @@ export function App() {
         padding: '20px',
       }}
     >
+      <p>${balance}</p>
+
       <PlinkoWrapper
         payouts={gameConfig.payouts}
         style={{ width: '650px', height: '650px' }}
       />
 
-      <button
-        onClick={() => {
-          play(
-            { walletId: WALLET_ID, bet: 100 },
-            {
-              onSuccess: (res) => dispatchPlayEvent(res),
-            }
-          );
-        }}
-      >
-        Play
-      </button>
-
-      <h1>${balance}</h1>
+      <Controller />
     </div>
   );
 }

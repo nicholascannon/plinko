@@ -11,7 +11,7 @@ export class Plinko extends ResizeableGame {
   constructor(canvas: HTMLCanvasElement, private readonly payouts: number[]) {
     super(canvas);
 
-    const boardSpacing = this.baseWidth / (this.payouts.length + 1); // add some margin
+    const boardSpacing = this.baseWidth / (this.payouts.length + 2); // add some margin
     this.board = new Board(this.payouts, boardSpacing);
     // center the board on stage
     this.board.position.set(
