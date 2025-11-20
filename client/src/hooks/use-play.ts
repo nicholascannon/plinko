@@ -10,8 +10,8 @@ export type PlayResponse = {
   requestId: string;
   transactionId: string;
   bucket: number;
-  winAmount: number;
-  balance: number;
+  winAmount: string;
+  balance: string;
 };
 
 export function usePlay() {

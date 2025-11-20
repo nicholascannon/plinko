@@ -2,7 +2,7 @@ import { PlinkoWrapper } from './components/plinko-wrapper';
 import { useWallet } from './hooks/use-wallet';
 import { useGameConfig } from './hooks/use-game-config';
 import { useEffect, useState } from 'react';
-import { PlayFinishEvent } from './events/play-finish-event';
+import { BalanceUpdateEvent } from './events/balance-update-event';
 import { Controller } from './components/controller';
 
 const WALLET_ID = '4bcaf50f-7c95-4f97-9a08-fbaddf966cb9';
@@ -11,7 +11,7 @@ export function App() {
   const { data: gameConfig, isLoading: loadingGameConfig } = useGameConfig();
   const { data: wallet } = useWallet(WALLET_ID);
 
-  const [balance, setBalance] = useState<number | undefined>(undefined);
+  const [balance, setBalance] = useState<string | undefined>(undefined);
 
   // TODO: temp - this is bad
   useEffect(() => {
@@ -19,18 +19,26 @@ export function App() {
   }, [wallet?.balance]);
 
   useEffect(() => {
-    const playFinish = (e: PlayFinishEvent) => {
-      setBalance(e.detail.balance);
+    const playFinish = (e: BalanceUpdateEvent) => {
+      const payload = e.detail;
+      if (payload.balance) {
+        setBalance(payload.balance);
+      } else if (payload.delta) {
+        setBalance((prev) =>
+          prev ? (Number(prev) + payload.delta).toFixed(2) : undefined
+        );
+      }
     };
+
     // TODO: type these better
     document.addEventListener(
-      PlayFinishEvent.TYPE,
+      BalanceUpdateEvent.TYPE,
       playFinish as EventListener
     );
 
     return () => {
       document.removeEventListener(
-        PlayFinishEvent.TYPE,
+        BalanceUpdateEvent.TYPE,
         playFinish as EventListener
       );
     };

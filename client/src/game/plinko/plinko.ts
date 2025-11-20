@@ -2,7 +2,7 @@ import { Board } from './entities/board';
 import { Disc } from './entities/disc';
 import { ResizeableGame } from '../common/resizeable-game';
 import { PlayEvent } from '../../events/play-event';
-import { dispatchPlayFinishEvent } from '../../events/play-finish-event';
+import { dispatchBalanceUpdateEvent } from '../../events/balance-update-event';
 
 export class Plinko extends ResizeableGame {
   private board: Board;
@@ -59,7 +59,7 @@ export class Plinko extends ResizeableGame {
 
     const disc = new Disc(this.board.config.spacing / 4);
     disc.drop(this.board, bucketIndex, () => {
-      dispatchPlayFinishEvent(e.detail);
+      dispatchBalanceUpdateEvent({ balance: e.detail.balance });
     });
   }
 }
