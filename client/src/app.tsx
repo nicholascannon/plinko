@@ -2,7 +2,9 @@ import { PlinkoWrapper } from './components/plinko-wrapper';
 import { usePlay } from './hooks/use-play';
 import { useWallet } from './hooks/use-wallet';
 import { useGameConfig } from './hooks/use-game-config';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { dispatchPlayEvent } from './events/play-event';
+import { PlayFinishEvent } from './events/play-finish-event';
 
 import './app.css';
 
@@ -10,23 +12,35 @@ const WALLET_ID = '4bcaf50f-7c95-4f97-9a08-fbaddf966cb9';
 
 export function App() {
   const { data: gameConfig, isLoading: loadingGameConfig } = useGameConfig();
-  const {
-    data: wallet,
-    isLoading: walletLoading,
-    refetch: refetchWallet,
-  } = useWallet(WALLET_ID);
+  const { data: wallet } = useWallet(WALLET_ID);
   const { mutate: play } = usePlay();
 
+  const [balance, setBalance] = useState<number | undefined>(undefined);
+
+  // TODO: temp - this is bad
   useEffect(() => {
-    const playFinish = () => refetchWallet();
-    document.addEventListener('playFinish', playFinish);
+    setBalance(wallet?.balance);
+  }, [wallet?.balance]);
+
+  useEffect(() => {
+    const playFinish = (e: PlayFinishEvent) => {
+      setBalance(e.detail.balance);
+    };
+    // TODO: type these better
+    document.addEventListener(
+      PlayFinishEvent.TYPE,
+      playFinish as EventListener
+    );
 
     return () => {
-      document.removeEventListener('playFinish', playFinish);
+      document.removeEventListener(
+        PlayFinishEvent.TYPE,
+        playFinish as EventListener
+      );
     };
-  }, [refetchWallet]);
+  }, []);
 
-  if (loadingGameConfig || walletLoading) return <h1>Loading...</h1>;
+  if (loadingGameConfig || !balance) return <h1>Loading...</h1>;
 
   return (
     <div
@@ -51,15 +65,7 @@ export function App() {
           play(
             { walletId: WALLET_ID, bet: 100 },
             {
-              onSuccess: (res) => {
-                document.dispatchEvent(
-                  new CustomEvent('play', {
-                    detail: {
-                      bucket: res.slot, // TODO: rename slot to bucket
-                    },
-                  })
-                );
-              },
+              onSuccess: (res) => dispatchPlayEvent(res),
             }
           );
         }}
@@ -67,7 +73,7 @@ export function App() {
         Play
       </button>
 
-      <h1>Wallet Balance: ${wallet.balance}</h1>
+      <h1>${balance}</h1>
     </div>
   );
 }

@@ -21,7 +21,7 @@ export class Disc extends Graphics {
     this.fill({ color: 'red' });
   }
 
-  public drop(board: Board, bucketIndex: number) {
+  public drop(board: Board, bucketIndex: number, onFinish: () => void) {
     if (this.animation) return;
 
     const targetBucket = board.buckets[bucketIndex];
@@ -55,14 +55,7 @@ export class Disc extends Graphics {
         board.removeChild(this);
         this.destroy();
         this.animation = undefined;
-
-        document.dispatchEvent(
-          new CustomEvent('playFinish', {
-            detail: {
-              // TODO: add detail here?
-            },
-          })
-        );
+        onFinish();
       },
     });
     this.animation = tl;
