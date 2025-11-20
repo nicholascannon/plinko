@@ -1,10 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 import { CONFIG } from '../config';
 
+export type PlayArgs = {
+  walletId: string;
+  bet: number;
+};
+
+export type PlayResponse = {
+  requestId: string;
+  transactionId: string;
+  bucket: number;
+  winAmount: number;
+  balance: number;
+};
+
 export function usePlay() {
-  // TODO: type this properly
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return useMutation<any, Error, { walletId: string; bet: number }>({
+  return useMutation<PlayResponse, Error, PlayArgs>({
     async mutationFn({ walletId, bet }) {
       const response = await fetch(`${CONFIG.GAME_SERVER_URL}/v1/plinko/play`, {
         method: 'POST',
