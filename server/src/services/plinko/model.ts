@@ -73,9 +73,9 @@ export class PlinkoModel {
   }
 
   public play(bet: number) {
-    const slot = binomial(this.rows, this.p);
-    const payout = this.payouts[slot]! * bet;
+    const bucket = binomial(this.rows, this.p);
+    const payout = this.payouts[bucket]! * bet;
 
-    return { slot, payout };
+    return { bucket, payout: Number(payout.toFixed(2)) };
   }
 }
