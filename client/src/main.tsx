@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as PIXI from 'pixi.js';
 import { gsap } from 'gsap';
 import { PixiPlugin } from 'gsap/PixiPlugin';
+import { WalletProvider } from './providers/wallet-provider.tsx';
 
 import './main.css';
 
@@ -16,7 +17,9 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <WalletProvider>
+        <App />
+      </WalletProvider>
     </QueryClientProvider>
   </StrictMode>
 );

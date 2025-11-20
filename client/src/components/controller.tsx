@@ -3,10 +3,14 @@ import { CONFIG } from '../config';
 import { dispatchPlayEvent } from '../events/play-event';
 import { usePlay } from '../hooks/use-play';
 import { dispatchBalanceUpdateEvent } from '../events/balance-update-event';
+import { useWallet } from '../providers/wallet-provider';
 
 export function Controller({ className }: { className: string }) {
   const { play } = usePlay();
   const [amount, setAmount] = useState(10);
+  const wallet = useWallet();
+
+  const betDisabled = !wallet?.balance || Number(wallet.balance) < amount;
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
@@ -23,7 +27,8 @@ export function Controller({ className }: { className: string }) {
       </span>
 
       <button
-        className="w-full bg-green-400 p-2 rounded text-white cursor-pointer hover:bg-green-500 active:bg-green-600 outline-green-500"
+        className="w-full bg-green-400 p-2 rounded text-white cursor-pointer hover:bg-green-500 active:bg-green-600 outline-green-500 disabled:bg-gray-500 disabled:cursor-not-allowed"
+        disabled={betDisabled}
         onClick={() => {
           dispatchBalanceUpdateEvent({ balance: undefined, delta: -amount });
           play(

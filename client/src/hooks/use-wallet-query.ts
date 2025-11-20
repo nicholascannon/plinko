@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { CONFIG } from '../config';
 
-export function useWallet(walletId: string) {
-  // TODO: add custom types
-  return useQuery({
+type WalletQueryResponse = {
+  id: string;
+  balance: string;
+  updated: string;
+};
+
+export function useWalletQuery(walletId: string) {
+  return useQuery<WalletQueryResponse, Error>({
     queryKey: ['get-wallet', walletId],
     queryFn: async () => {
       const response = await fetch(
