@@ -31,5 +31,12 @@ export function PlinkoWrapper({ style, payouts }: PlinkoWrapperProps) {
     };
   }, [payouts]);
 
-  return <canvas style={style} ref={canvasRef}></canvas>;
+  return (
+    <div style={{ ...style, aspectRatio: '1 / 1' }}>
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      />
+    </div>
+  );
 }

@@ -39,15 +39,19 @@ export function App() {
   if (loadingGameConfig || !balance) return <h1>Loading...</h1>;
 
   return (
-    <div className="flex flex-col h-screen gap-4 items-center">
-      <p>${balance}</p>
+    <div className="flex flex-col h-screen max-h-screen gap-2 items-center p-4">
+      <div className="flex items-center justify-center w-full">
+        <h1 className="text-2xl">${balance}</h1>
+      </div>
 
-      <PlinkoWrapper
-        payouts={gameConfig.payouts}
-        style={{ width: '650px', height: '650px' }}
-      />
+      <div className="flex-1 flex flex-col-reverse gap-2 justify-between items-center lg:flex-row lg:items-stretch">
+        <Controller className="w-full flex-1 lg:min-w-[400px]" />
 
-      <Controller />
+        <PlinkoWrapper
+          payouts={gameConfig.payouts}
+          style={{ width: '100%', maxWidth: '650px', flex: 1 }}
+        />
+      </div>
     </div>
   );
 }
