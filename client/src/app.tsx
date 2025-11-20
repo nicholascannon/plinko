@@ -39,18 +39,7 @@ export function App() {
   if (loadingGameConfig || !balance) return <h1>Loading...</h1>;
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        maxHeight: '100vh',
-        flexDirection: 'column',
-        gap: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px',
-      }}
-    >
+    <div className="flex flex-col h-screen gap-4 items-center">
       <p>${balance}</p>
 
       <PlinkoWrapper
