@@ -5,12 +5,17 @@ import { usePlay } from '../hooks/use-play';
 import { dispatchBalanceUpdateEvent } from '../events/balance-update-event';
 import { useWallet } from '../providers/wallet-provider';
 
+const MIN_BET_AMOUNT = 1;
+
 export function Controller({ className }: { className: string }) {
   const { play } = usePlay();
   const [amount, setAmount] = useState(10);
   const wallet = useWallet();
 
-  const betDisabled = !wallet?.balance || Number(wallet.balance) < amount;
+  const betDisabled =
+    !wallet?.balance ||
+    Number(wallet.balance) < amount ||
+    amount < MIN_BET_AMOUNT;
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
