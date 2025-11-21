@@ -26,6 +26,7 @@ export function Controller({ className }: { className: string }) {
           type="number"
           name="amount"
           id="amount"
+          min="1"
           value={amount}
           onChange={(e) => setAmount(Number(e.target.value))}
         />
