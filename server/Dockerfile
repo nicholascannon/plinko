@@ -8,9 +8,8 @@ COPY package-lock.json ./
 RUN npm ci
 
 COPY tsconfig.json .
-# TODO: ORM coming soon
-# COPY drizzle.config.ts .
-# COPY ./drizzle ./drizzle
+COPY drizzle.config.ts .
+COPY ./drizzle ./drizzle
 COPY vitest.config.ts .
 COPY ./src ./src
 
@@ -21,8 +20,8 @@ FROM base AS runtime
 WORKDIR /opt/app
 
 COPY --from=build /usr/src/app/dist ./dist
-# COPY --from=build /usr/src/app/drizzle ./drizzle
-# COPY --from=build /usr/src/app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=build /usr/src/app/drizzle ./drizzle
+COPY --from=build /usr/src/app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package.json ./
 
