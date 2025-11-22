@@ -1,12 +1,15 @@
 import * as math from 'mathjs';
 import binomial from '@stdlib/random-base-binomial';
 import { LOGGER } from '../../lib/logger.js';
+import { toValidMoney } from '../../lib/utils/number.js';
 
 export class PlinkoModel {
   public readonly rtp: number;
   public readonly payouts: number[];
   public readonly p: number;
   public readonly rows: number;
+
+  public static readonly GAME_IDENTIFIER = 'plinko-v1';
 
   constructor(config: {
     targetRtp: number;
@@ -76,6 +79,6 @@ export class PlinkoModel {
     const bucket = binomial(this.rows, this.p);
     const payout = this.payouts[bucket]! * bet;
 
-    return { bucket, payout: Number(payout.toFixed(2)) };
+    return { bucket, payout: toValidMoney(payout) };
   }
 }
