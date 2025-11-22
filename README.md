@@ -206,3 +206,16 @@ npm run test:rtp
 ## API Testing
 
 Bruno API collection is available in the `bruno/` directory for testing endpoints.
+
+## License
+
+This project is licensed under a custom Educational Use License. See [LICENSE](LICENSE) for details.
+
+**Key restrictions:**
+- ✅ Educational use only (learning, research, coursework)
+- ❌ Commercial use prohibited
+- ❌ Gambling/casino operations prohibited
+- ❌ Portfolio use prohibited (you cannot claim this as your own work)
+- ❌ Production deployment prohibited
+
+The copyright owner retains all rights and may use this code commercially.
