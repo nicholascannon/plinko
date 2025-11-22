@@ -4,25 +4,37 @@ import cors from 'cors';
 import { loggingMiddleware } from './lib/logger.js';
 import { genericErrorHandler } from './middleware/generic-error-handler.js';
 import { zodErrorHandler } from './middleware/zod-error-handler.js';
-import { PlinkoController } from './services/plinko/controller.js';
-import { PlinkoModel } from './services/plinko/model.js';
+import { PlinkoController } from './services/plinko/plinko-controller.js';
+import type { PlinkoModel } from './services/plinko/model.js';
 import type { WalletClient } from './clients/wallet/client.js';
 import { walletClientErrorHandler } from './clients/wallet/error-handler.js';
 import { requestIdMiddleware } from './middleware/request-id.js';
 import { CONFIG } from './config/env.js';
+import { GameService } from './services/game/game-service.js';
+import type { GameRepository } from './services/game/game-repo.js';
+import { PlinkoService } from './services/plinko/plinko-service.js';
 
 export function createApp({
   plinkoModel,
   enableLogging = true,
   walletClient,
+  gameRepo,
 }: {
   enableLogging?: boolean;
   plinkoModel: PlinkoModel;
   walletClient: WalletClient;
+  gameRepo: GameRepository;
 }): Application {
   const app = express();
 
-  const plinkoController = new PlinkoController(plinkoModel, walletClient);
+  const gameService = new GameService(gameRepo);
+  const plinkoService = new PlinkoService(
+    plinkoModel,
+    walletClient,
+    gameService
+  );
+
+  const plinkoController = new PlinkoController(plinkoService);
 
   app.use(requestIdMiddleware);
   app.use(
