@@ -32,6 +32,7 @@ function testRtp(model: PlinkoModel, iterations: number = 1_000_000) {
     console.log('\n✅ RTP test passed!');
   } else {
     console.log('\n⚠️  RTP test warning: difference is larger than expected');
+    process.exit(1);
   }
 }
 
