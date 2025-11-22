@@ -14,14 +14,6 @@ describe('createInitPlayMetadataV1', () => {
       requestId: 'req-123',
     });
   });
-
-  it('should always set version to 1.0.0', () => {
-    const metadata1 = createInitPlayMetadataV1('req-1');
-    const metadata2 = createInitPlayMetadataV1('req-2');
-
-    expect(metadata1.version).toBe('1.0.0');
-    expect(metadata2.version).toBe('1.0.0');
-  });
 });
 
 describe('createCompletePlayMetadataV1', () => {
@@ -30,12 +22,16 @@ describe('createCompletePlayMetadataV1', () => {
     const debitTransactionId = 'debit-tx-456';
     const creditTransactionId = 'credit-tx-789';
     const initPlayId = 'init-play-abc';
+    const bucket = 1;
+    const multiplier = 1.5;
 
     const metadata = createCompletePlayMetadataV1(
       requestId,
       debitTransactionId,
       creditTransactionId,
-      initPlayId
+      initPlayId,
+      bucket,
+      multiplier
     );
 
     expect(metadata).toEqual({
@@ -44,17 +40,8 @@ describe('createCompletePlayMetadataV1', () => {
       debitTransactionId: 'debit-tx-456',
       creditTransactionId: 'credit-tx-789',
       initPlayId: 'init-play-abc',
+      bucket: 1,
+      multiplier: 1.5,
     });
-  });
-
-  it('should always set version to 1.0.0', () => {
-    const metadata = createCompletePlayMetadataV1(
-      'req',
-      'debit',
-      'credit',
-      'init'
-    );
-
-    expect(metadata.version).toBe('1.0.0');
   });
 });

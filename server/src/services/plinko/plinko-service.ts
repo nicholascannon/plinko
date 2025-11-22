@@ -1,5 +1,4 @@
 import type { WalletClient } from '../../clients/wallet/wallet-client.js';
-import { toValidMoney } from '../../lib/utils/number.js';
 import type { GameService } from '../game/game-service.js';
 import { PlinkoModel } from './model.js';
 import {
@@ -57,26 +56,27 @@ export class PlinkoService {
       const { transactionId: debitTransactionId } =
         await this.walletClient.debit(walletId, bet, requestId);
 
-      const { payout, bucket } = this.plinkoModel.play(bet);
+      const { payout, bucket, multiplier } = this.plinkoModel.play(bet);
 
       const { balance, transactionId: creditTransactionId } =
         await this.walletClient.credit(walletId, payout, requestId);
-      const winAmount = toValidMoney(payout - bet).toString();
 
       const { playId } = await this.gameService.completePlay(
         initPlay.id,
-        winAmount,
+        payout.toString(),
         createCompletePlayMetadataV1(
           requestId,
           debitTransactionId,
           creditTransactionId,
-          initPlay.playId
+          initPlay.playId,
+          bucket,
+          multiplier
         )
       );
 
       return {
         playId,
-        winAmount,
+        winAmount: payout.toString(),
         bucket,
         balance,
         requestId,

@@ -11,7 +11,9 @@ export function createCompletePlayMetadataV1(
   requestId: string,
   debitTransactionId: string,
   creditTransactionId: string,
-  initPlayId: string
+  initPlayId: string,
+  bucket: number,
+  multiplier: number
 ): Metadata {
   return {
     version: '1.0.0',
@@ -19,5 +21,7 @@ export function createCompletePlayMetadataV1(
     debitTransactionId,
     creditTransactionId,
     initPlayId,
+    bucket,
+    multiplier,
   };
 }
