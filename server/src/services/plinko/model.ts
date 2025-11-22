@@ -77,8 +77,9 @@ export class PlinkoModel {
 
   public play(bet: number) {
     const bucket = binomial(this.rows, this.p);
-    const payout = this.payouts[bucket]! * bet;
+    const multiplier = this.payouts[bucket]!;
+    const payout = multiplier * bet;
 
-    return { bucket, payout: toValidMoney(payout) };
+    return { bucket, multiplier, payout: toValidMoney(payout) };
   }
 }
