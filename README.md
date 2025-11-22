@@ -212,6 +212,7 @@ Bruno API collection is available in the `bruno/` directory for testing endpoint
 This project is licensed under a custom Educational Use License. See [LICENSE](LICENSE) for details.
 
 **Key restrictions:**
+
 - ✅ Educational use only (learning, research, coursework)
 - ❌ Commercial use prohibited
 - ❌ Gambling/casino operations prohibited
