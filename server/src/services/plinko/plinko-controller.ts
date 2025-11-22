@@ -45,7 +45,7 @@ export class PlinkoController {
       bucket: completedPlay.bucket,
       balance: completedPlay.balance,
       requestId: completedPlay.requestId,
-      transactionId: completedPlay.transactionId,
+      transactions: completedPlay.transactions,
     });
   };
 }

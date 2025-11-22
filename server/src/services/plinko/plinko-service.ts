@@ -2,6 +2,10 @@ import type { WalletClient } from '../../clients/wallet/client.js';
 import { toValidMoney } from '../../lib/utils/number.js';
 import type { GameService } from '../game/game-service.js';
 import { PlinkoModel } from './model.js';
+import {
+  createCompletePlayMetadataV1,
+  createInitPlayMetadataV1,
+} from './utils/metadata.js';
 
 type PlinkoInit = {
   payouts: number[];
@@ -15,7 +19,10 @@ type CompletedPlay = {
   bucket: number;
   balance: string;
   requestId: string;
-  transactionId: string;
+  transactions: {
+    debitTransactionId: string;
+    creditTransactionId: string;
+  };
 };
 
 export class PlinkoService {
@@ -42,32 +49,29 @@ export class PlinkoService {
       game: PlinkoModel.GAME_IDENTIFIER,
       walletId,
       betAmount: bet.toString(),
-      metadata: {
-        requestId,
-      },
+      metadata: createInitPlayMetadataV1(requestId),
     });
 
     try {
       // TODO: wallet needs to be updated to take metadata (playId)
-      await this.walletClient.debit(walletId, bet, requestId);
+      const { transactionId: debitTransactionId } =
+        await this.walletClient.debit(walletId, bet, requestId);
 
       const { payout, bucket } = this.plinkoModel.play(bet);
 
-      const { balance, transactionId } = await this.walletClient.credit(
-        walletId,
-        payout,
-        requestId
-      );
+      const { balance, transactionId: creditTransactionId } =
+        await this.walletClient.credit(walletId, payout, requestId);
       const winAmount = toValidMoney(payout - bet).toString();
 
       const { playId } = await this.gameService.completePlay(
         initPlay.id,
         winAmount,
-        {
+        createCompletePlayMetadataV1(
           requestId,
-          transactionId,
-          initPlayId: initPlay.playId,
-        }
+          debitTransactionId,
+          creditTransactionId,
+          initPlay.playId
+        )
       );
 
       return {
@@ -76,7 +80,10 @@ export class PlinkoService {
         bucket,
         balance,
         requestId,
-        transactionId,
+        transactions: {
+          debitTransactionId,
+          creditTransactionId,
+        },
       };
     } catch (error) {
       await this.gameService.failPlay(initPlay.id, {
