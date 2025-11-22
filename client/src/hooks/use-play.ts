@@ -15,7 +15,7 @@ export type PlayResponse = {
 };
 
 export function usePlay() {
-  const { mutate } = useMutation<PlayResponse, Error, PlayArgs>({
+  const { mutate, ...rest } = useMutation<PlayResponse, Error, PlayArgs>({
     async mutationFn({ walletId, bet }) {
       const response = await fetch(`${CONFIG.GAME_SERVER_URL}/v1/plinko/play`, {
         method: 'POST',
@@ -31,5 +31,5 @@ export function usePlay() {
     },
   });
 
-  return { play: mutate };
+  return { play: mutate, ...rest };
 }
