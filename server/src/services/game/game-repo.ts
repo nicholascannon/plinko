@@ -67,3 +67,29 @@ export class PgGameRepository implements GameRepository {
     };
   }
 }
+
+export class MockGameRepository implements GameRepository {
+  private playEvents: PersistedPlay[] = [];
+
+  public async getPlayEventById(
+    id: bigint,
+    status?: PlayStatus
+  ): Promise<PersistedPlay | undefined> {
+    if (status)
+      return this.playEvents.find(
+        (play) => play.id === id && play.status === status
+      );
+    return this.playEvents.find((play) => play.id === id);
+  }
+
+  public async insertPlayEvent(play: Play): Promise<PersistedPlay> {
+    const id = BigInt(this.playEvents.length + 1);
+    const persistedPlay: PersistedPlay = {
+      id,
+      createdAt: new Date(),
+      ...play,
+    };
+    this.playEvents.push(persistedPlay);
+    return persistedPlay;
+  }
+}

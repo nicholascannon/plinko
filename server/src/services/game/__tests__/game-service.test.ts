@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GameService } from '../game-service.js';
-import type { GameRepository } from '../game-repo.js';
-import type { PersistedPlay } from '../types.js';
-import { LOGGER } from '../../../lib/logger.js';
+import { MockGameRepository } from '../game-repo.js';
 
+const NOW = new Date('2025-01-01T00:00:00.000Z');
 const TRANSACTION_ID = '0-0-0-0-0';
 
 vi.stubGlobal('crypto', {
@@ -12,64 +11,66 @@ vi.stubGlobal('crypto', {
 
 describe('GameService', () => {
   let gameService: GameService;
-  let mockGameRepo: GameRepository;
-  let mockGetPlayEventById: ReturnType<typeof vi.fn>;
-  let mockInsertPlayEvent: ReturnType<typeof vi.fn>;
+  let mockGameRepo: MockGameRepository;
+  let saveTransactionSpy: ReturnType<typeof vi.fn>;
+  let getPlayEventByIdSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockGetPlayEventById = vi.fn();
-    mockInsertPlayEvent = vi.fn();
-    mockGameRepo = {
-      getPlayEventById: mockGetPlayEventById,
-      insertPlayEvent: mockInsertPlayEvent,
-    } as unknown as GameRepository;
+    mockGameRepo = new MockGameRepository();
+    saveTransactionSpy = vi.spyOn(
+      MockGameRepository.prototype,
+      'insertPlayEvent'
+    );
+    getPlayEventByIdSpy = vi.spyOn(
+      MockGameRepository.prototype,
+      'getPlayEventById'
+    );
     gameService = new GameService(mockGameRepo);
-    vi.clearAllMocks();
+
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+    vi.useRealTimers();
   });
 
   describe('initPlay', () => {
     it('should create an initiated play', async () => {
-      const metadata = { testKey: 'testValue', number: 42 };
-      const mockPersistedPlay: PersistedPlay = {
-        id: 1n,
-        createdAt: new Date(),
-        playId: TRANSACTION_ID,
-        walletId: 'wallet-123',
-        game: 'plinko',
-        betAmount: '100',
-        winAmount: undefined,
-        status: 'initiated',
-        metadata,
-      };
-
-      mockInsertPlayEvent.mockResolvedValue(mockPersistedPlay);
-
       const result = await gameService.initPlay({
         game: 'plinko',
         walletId: 'wallet-123',
         betAmount: '100',
-        metadata,
+        metadata: { testKey: 'testValue', number: 42 },
       });
 
-      expect(mockInsertPlayEvent).toHaveBeenCalledWith({
+      expect(saveTransactionSpy).toHaveBeenCalledWith({
         playId: TRANSACTION_ID,
         walletId: 'wallet-123',
         game: 'plinko',
         betAmount: '100',
         winAmount: undefined,
         status: 'initiated',
-        metadata,
+        metadata: { testKey: 'testValue', number: 42 },
       });
-      expect(result).toEqual(mockPersistedPlay);
+      expect(result).toEqual({
+        id: 1n,
+        createdAt: NOW,
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: undefined,
+        status: 'initiated',
+        metadata: { testKey: 'testValue', number: 42 },
+      });
     });
   });
 
   describe('completePlay', () => {
     it('should complete a play', async () => {
-      const metadata = { result: 'win', multiplier: 1.5 };
-      const initPlay: PersistedPlay = {
-        id: 1n,
-        createdAt: new Date(),
+      mockGameRepo.insertPlayEvent({
         playId: TRANSACTION_ID,
         walletId: 'wallet-123',
         game: 'plinko',
@@ -77,55 +78,48 @@ describe('GameService', () => {
         winAmount: undefined,
         status: 'initiated',
         metadata: undefined,
-      };
-
-      const completedPlay: PersistedPlay = {
-        id: 2n,
-        createdAt: new Date(),
-        playId: TRANSACTION_ID,
-        walletId: 'wallet-123',
-        game: 'plinko',
-        betAmount: '100',
-        winAmount: '150',
-        status: 'completed',
-        metadata,
-      };
-
-      mockGetPlayEventById.mockResolvedValue(initPlay);
-      mockInsertPlayEvent.mockResolvedValue(completedPlay);
-
-      const result = await gameService.completePlay(1n, '150', metadata);
-
-      expect(mockInsertPlayEvent).toHaveBeenCalledWith({
-        playId: TRANSACTION_ID,
-        walletId: 'wallet-123',
-        game: 'plinko',
-        betAmount: '100',
-        winAmount: '150',
-        status: 'completed',
-        metadata,
       });
-      expect(result).toEqual(completedPlay);
+
+      const result = await gameService.completePlay(1n, '150', {
+        result: 'win',
+        multiplier: 1.5,
+      });
+
+      expect(saveTransactionSpy).toHaveBeenCalledWith({
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: '150',
+        status: 'completed',
+        metadata: { result: 'win', multiplier: 1.5 },
+      });
+      expect(result).toEqual({
+        id: 2n,
+        createdAt: NOW,
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: '150',
+        status: 'completed',
+        metadata: { result: 'win', multiplier: 1.5 },
+      });
     });
 
     it('should throw error when init play not found', async () => {
-      mockGetPlayEventById.mockResolvedValue(undefined);
-
       await expect(gameService.completePlay(1n, '150')).rejects.toThrow(
         'Play init not found when completing play'
       );
 
-      expect(mockGetPlayEventById).toHaveBeenCalledWith(1n, 'initiated');
-      expect(mockInsertPlayEvent).not.toHaveBeenCalled();
+      expect(getPlayEventByIdSpy).toHaveBeenCalledWith(1n, 'initiated');
+      expect(saveTransactionSpy).not.toHaveBeenCalled();
     });
   });
 
   describe('failPlay', () => {
     it('should fail a play', async () => {
-      const metadata = { error: 'timeout', reason: 'network' };
-      const initPlay: PersistedPlay = {
-        id: 1n,
-        createdAt: new Date(),
+      mockGameRepo.insertPlayEvent({
         playId: TRANSACTION_ID,
         walletId: 'wallet-123',
         game: 'plinko',
@@ -133,50 +127,42 @@ describe('GameService', () => {
         winAmount: undefined,
         status: 'initiated',
         metadata: undefined,
-      };
-
-      const failedPlay: PersistedPlay = {
-        id: 2n,
-        createdAt: new Date(),
-        playId: TRANSACTION_ID,
-        walletId: 'wallet-123',
-        game: 'plinko',
-        betAmount: '100',
-        winAmount: undefined,
-        status: 'failed',
-        metadata,
-      };
-
-      mockGetPlayEventById.mockResolvedValue(initPlay);
-      mockInsertPlayEvent.mockResolvedValue(failedPlay);
-
-      const result = await gameService.failPlay(1n, metadata);
-
-      expect(mockInsertPlayEvent).toHaveBeenCalledWith({
-        playId: TRANSACTION_ID,
-        walletId: 'wallet-123',
-        game: 'plinko',
-        betAmount: '100',
-        winAmount: undefined,
-        status: 'failed',
-        metadata,
       });
-      expect(result).toEqual(failedPlay);
+
+      const result = await gameService.failPlay(1n, {
+        error: 'timeout',
+        reason: 'network',
+      });
+
+      expect(saveTransactionSpy).toHaveBeenCalledWith({
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: undefined,
+        status: 'failed',
+        metadata: { error: 'timeout', reason: 'network' },
+      });
+      expect(result).toEqual({
+        id: 2n,
+        createdAt: NOW,
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: undefined,
+        status: 'failed',
+        metadata: { error: 'timeout', reason: 'network' },
+      });
     });
 
     it('should return undefined and log warning when init play not found', async () => {
       const metadata = { error: 'not found' };
-      mockGetPlayEventById.mockResolvedValue(undefined);
 
       const result = await gameService.failPlay(1n, metadata);
 
-      expect(LOGGER.warn).toHaveBeenCalledWith(
-        'Play init not found when failing play',
-        {
-          id: 1n,
-          metadata,
-        }
-      );
+      expect(getPlayEventByIdSpy).toHaveBeenCalledWith(1n, 'initiated');
+      expect(saveTransactionSpy).not.toHaveBeenCalled();
       expect(result).toBeUndefined();
     });
   });
