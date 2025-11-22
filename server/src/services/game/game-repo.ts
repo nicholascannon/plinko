@@ -54,6 +54,7 @@ export class PgGameRepository implements GameRepository {
         wallet_id: play.walletId,
         game: play.game,
         bet_amount: play.betAmount,
+        win_amount: play.winAmount,
         status: play.status,
         metadata: play.metadata,
       })
