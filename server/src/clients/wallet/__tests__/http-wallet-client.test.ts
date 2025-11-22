@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { HttpWalletClient } from '../client.js';
+import { HttpWalletClient } from '../http-wallet-client.js';
 import { HttpWalletClientError } from '../errors.js';
 import { LOGGER } from '../../../lib/logger.js';
 

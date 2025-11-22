@@ -4,7 +4,7 @@ import { CONFIG } from './config/env.js';
 import { lifecycle } from './lib/lifecycle.js';
 import { LOGGER, setupProcessLogging } from './lib/logger.js';
 import { PlinkoModel } from './services/plinko/model.js';
-import { HttpWalletClient } from './clients/wallet/client.js';
+import { HttpWalletClient } from './clients/wallet/http-wallet-client.js';
 import { createDb } from './data/db.js';
 import { PgGameRepository } from './services/game/game-repo.js';
 

@@ -6,7 +6,7 @@ import { genericErrorHandler } from './middleware/generic-error-handler.js';
 import { zodErrorHandler } from './middleware/zod-error-handler.js';
 import { PlinkoController } from './services/plinko/plinko-controller.js';
 import type { PlinkoModel } from './services/plinko/model.js';
-import type { WalletClient } from './clients/wallet/client.js';
+import type { WalletClient } from './clients/wallet/wallet-client.js';
 import { walletClientErrorHandler } from './clients/wallet/error-handler.js';
 import { requestIdMiddleware } from './middleware/request-id.js';
 import { CONFIG } from './config/env.js';

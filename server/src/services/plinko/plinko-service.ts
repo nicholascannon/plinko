@@ -1,4 +1,4 @@
-import type { WalletClient } from '../../clients/wallet/client.js';
+import type { WalletClient } from '../../clients/wallet/wallet-client.js';
 import { toValidMoney } from '../../lib/utils/number.js';
 import type { GameService } from '../game/game-service.js';
 import { PlinkoModel } from './model.js';
