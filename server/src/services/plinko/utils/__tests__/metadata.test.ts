@@ -21,7 +21,6 @@ describe('createCompletePlayMetadataV1', () => {
     const requestId = 'req-123';
     const debitTransactionId = 'debit-tx-456';
     const creditTransactionId = 'credit-tx-789';
-    const initPlayId = 'init-play-abc';
     const bucket = 1;
     const multiplier = 1.5;
 
@@ -29,7 +28,6 @@ describe('createCompletePlayMetadataV1', () => {
       requestId,
       debitTransactionId,
       creditTransactionId,
-      initPlayId,
       bucket,
       multiplier
     );
@@ -39,7 +37,6 @@ describe('createCompletePlayMetadataV1', () => {
       requestId: 'req-123',
       debitTransactionId: 'debit-tx-456',
       creditTransactionId: 'credit-tx-789',
-      initPlayId: 'init-play-abc',
       bucket: 1,
       multiplier: 1.5,
     });

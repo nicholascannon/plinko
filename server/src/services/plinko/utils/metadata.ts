@@ -11,7 +11,6 @@ export function createCompletePlayMetadataV1(
   requestId: string,
   debitTransactionId: string,
   creditTransactionId: string,
-  initPlayId: string,
   bucket: number,
   multiplier: number
 ): Metadata {
@@ -20,7 +19,6 @@ export function createCompletePlayMetadataV1(
     requestId,
     debitTransactionId,
     creditTransactionId,
-    initPlayId,
     bucket,
     multiplier,
   };

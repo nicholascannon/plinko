@@ -84,7 +84,6 @@ describe('PlinkoService', () => {
           REQUEST_ID,
           'debit-txn-id',
           'credit-txn-id',
-          PLAY_ID,
           1,
           2
         )
@@ -155,7 +154,6 @@ describe('PlinkoService', () => {
           REQUEST_ID,
           'debit-txn-id',
           'credit-txn-id',
-          PLAY_ID,
           5,
           0.2
         )

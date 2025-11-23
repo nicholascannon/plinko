@@ -71,7 +71,6 @@ export class PlinkoService {
           requestId,
           debitTransactionId,
           creditTransactionId,
-          initPlay.playId,
           bucket,
           multiplier
         )
