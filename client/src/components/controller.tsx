@@ -7,7 +7,7 @@ import { useWallet } from '../providers/wallet-provider';
 
 const MIN_BET_AMOUNT = 1;
 
-export function Controller({ className }: { className: string }) {
+export function Controller({ className }: { className?: string }) {
   const { play, isPending } = usePlay();
   const [amount, setAmount] = useState(10);
   const wallet = useWallet();

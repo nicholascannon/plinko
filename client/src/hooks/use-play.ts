@@ -7,11 +7,17 @@ export type PlayArgs = {
 };
 
 export type PlayResponse = {
-  requestId: string;
-  transactionId: string;
-  bucket: number;
+  playId: string;
+  betAmount: string;
   winAmount: string;
+  bucket: number;
   balance: string;
+  requestId: string;
+  multiplier: string;
+  transactions: {
+    debitTransactionId: string;
+    creditTransactionId: string;
+  };
 };
 
 export function usePlay() {

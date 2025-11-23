@@ -2,6 +2,7 @@ import { PlinkoWrapper } from './components/plinko-wrapper';
 import { useGameConfig } from './hooks/use-game-config';
 import { Controller } from './components/controller';
 import { useWallet } from './providers/wallet-provider';
+import { PlayHistory } from './components/play-history';
 
 export function App() {
   const { data: gameConfig, isLoading: loadingGameConfig } = useGameConfig();
@@ -18,7 +19,10 @@ export function App() {
       </div>
 
       <div className="flex gap-4 flex-col-reverse justify-center items-center sm:flex-row sm:items-start">
-        <Controller className="w-full sm:max-w-[435px] flex-1" />
+        <div className="w-full sm:max-w-[435px] flex-1 gap-4 flex flex-col">
+          <Controller />
+          <PlayHistory />
+        </div>
 
         <PlinkoWrapper
           payouts={gameConfig.payouts}
