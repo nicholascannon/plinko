@@ -3,6 +3,12 @@ import binomial from '@stdlib/random-base-binomial';
 import { LOGGER } from '../../lib/logger.js';
 import { toValidMoney } from '../../lib/utils/number.js';
 
+export type PlinkoPlayResponse = {
+  bucket: number;
+  multiplier: number;
+  payout: number;
+};
+
 export class PlinkoModel {
   public readonly rtp: number;
   public readonly payouts: number[];
@@ -75,7 +81,7 @@ export class PlinkoModel {
     });
   }
 
-  public play(bet: number) {
+  public play(bet: number): PlinkoPlayResponse {
     const bucket = binomial(this.rows, this.p);
     const multiplier = this.payouts[bucket]!;
     const payout = multiplier * bet;
