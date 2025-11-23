@@ -42,9 +42,11 @@ export class PlinkoController {
     return res.json({
       playId: completedPlay.playId,
       winAmount: completedPlay.winAmount,
+      betAmount: bet,
       bucket: completedPlay.bucket,
       balance: completedPlay.balance,
       requestId: completedPlay.requestId,
+      multiplier: completedPlay.multiplier,
       transactions: completedPlay.transactions,
     });
   };

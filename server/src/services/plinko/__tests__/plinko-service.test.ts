@@ -102,6 +102,7 @@ describe('PlinkoService', () => {
         bucket: 1,
         balance: '20',
         requestId: REQUEST_ID,
+        multiplier: '2.00',
         transactions: {
           creditTransactionId: 'credit-txn-id',
           debitTransactionId: 'debit-txn-id',
@@ -172,6 +173,7 @@ describe('PlinkoService', () => {
         bucket: 5,
         balance: '2',
         requestId: REQUEST_ID,
+        multiplier: '0.20',
         transactions: {
           creditTransactionId: 'credit-txn-id',
           debitTransactionId: 'debit-txn-id',

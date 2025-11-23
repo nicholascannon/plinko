@@ -18,6 +18,7 @@ type CompletedPlay = {
   bucket: number;
   balance: string;
   requestId: string;
+  multiplier: string;
   transactions: {
     debitTransactionId: string;
     creditTransactionId: string;
@@ -82,6 +83,7 @@ export class PlinkoService {
         bucket,
         balance,
         requestId,
+        multiplier: multiplier.toFixed(2),
         transactions: {
           debitTransactionId,
           creditTransactionId,
