@@ -61,7 +61,9 @@ describe('HttpWalletClient', () => {
       mockFetchValue(mockResult);
 
       // ACTION
-      const result = await client.credit(WALLET_ID, AMOUNT, REQUEST_ID);
+      const result = await client.credit(WALLET_ID, AMOUNT, REQUEST_ID, {
+        playId: 'play-123',
+      });
 
       // ASSERT
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
@@ -73,7 +75,10 @@ describe('HttpWalletClient', () => {
         `${BASE_URL}/v1/wallet/${WALLET_ID}/credit`,
         {
           method: 'POST',
-          body: JSON.stringify({ amount: AMOUNT }),
+          body: JSON.stringify({
+            amount: AMOUNT,
+            metadata: { playId: 'play-123' },
+          }),
           headers: {
             'Content-Type': 'application/json',
             'X-Request-Id': REQUEST_ID,
@@ -91,7 +96,7 @@ describe('HttpWalletClient', () => {
 
       // ACTION & ASSERT
       await expect(
-        client.credit(WALLET_ID, AMOUNT, REQUEST_ID)
+        client.credit(WALLET_ID, AMOUNT, REQUEST_ID, { playId: 'play-123' })
       ).rejects.toThrow(WalletClientError);
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
         id: WALLET_ID,
@@ -108,7 +113,9 @@ describe('HttpWalletClient', () => {
       mockFetchValue(mockResult);
 
       // ACTION
-      const result = await client.debit(WALLET_ID, AMOUNT, REQUEST_ID);
+      const result = await client.debit(WALLET_ID, AMOUNT, REQUEST_ID, {
+        playId: 'play-123',
+      });
 
       // ASSERT
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
@@ -120,7 +127,10 @@ describe('HttpWalletClient', () => {
         `${BASE_URL}/v1/wallet/${WALLET_ID}/debit`,
         {
           method: 'POST',
-          body: JSON.stringify({ amount: AMOUNT }),
+          body: JSON.stringify({
+            amount: AMOUNT,
+            metadata: { playId: 'play-123' },
+          }),
           headers: {
             'Content-Type': 'application/json',
             'X-Request-Id': REQUEST_ID,
@@ -137,9 +147,9 @@ describe('HttpWalletClient', () => {
       mockFetchValue(errorPayload, 400);
 
       // ACTION & ASSERT
-      await expect(client.debit(WALLET_ID, AMOUNT, REQUEST_ID)).rejects.toThrow(
-        WalletClientError
-      );
+      await expect(
+        client.debit(WALLET_ID, AMOUNT, REQUEST_ID, { playId: 'play-123' })
+      ).rejects.toThrow(WalletClientError);
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
         id: WALLET_ID,
         operation: 'debit',

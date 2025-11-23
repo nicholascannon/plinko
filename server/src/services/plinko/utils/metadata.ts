@@ -1,4 +1,4 @@
-import type { Metadata } from '../../game/types.js';
+import type { Metadata } from '../../../lib/types.js';
 
 export function createInitPlayMetadataV1(requestId: string): Metadata {
   return {

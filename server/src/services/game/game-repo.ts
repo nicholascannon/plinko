@@ -1,6 +1,7 @@
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { and, eq } from 'drizzle-orm';
-import type { Metadata, PersistedPlay, Play, PlayStatus } from './types.js';
+import type { PersistedPlay, Play, PlayStatus } from './types.js';
+import type { Metadata } from '../../lib/types.js';
 import { playsTable } from '../../data/schema.js';
 
 export interface GameRepository {

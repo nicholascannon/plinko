@@ -1,6 +1,7 @@
 import { LOGGER } from '../../lib/logger.js';
 import type { GameRepository } from './game-repo.js';
-import type { Metadata, PersistedPlay, Play } from './types.js';
+import type { PersistedPlay, Play } from './types.js';
+import type { Metadata } from '../../lib/types.js';
 
 export class GameService {
   constructor(private readonly gameRepo: GameRepository) {}

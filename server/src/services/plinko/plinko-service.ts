@@ -52,14 +52,17 @@ export class PlinkoService {
     });
 
     try {
-      // TODO: wallet needs to be updated to take metadata (playId)
       const { transactionId: debitTransactionId } =
-        await this.walletClient.debit(walletId, bet, requestId);
+        await this.walletClient.debit(walletId, bet, requestId, {
+          playId: initPlay.playId,
+        });
 
       const { payout, bucket, multiplier } = this.plinkoModel.play(bet);
 
       const { balance, transactionId: creditTransactionId } =
-        await this.walletClient.credit(walletId, payout, requestId);
+        await this.walletClient.credit(walletId, payout, requestId, {
+          playId: initPlay.playId,
+        });
 
       const { playId } = await this.gameService.completePlay(
         initPlay.id,

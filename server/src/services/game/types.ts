@@ -1,3 +1,5 @@
+import type { Metadata } from '../../lib/types.js';
+
 export type Play = {
   playId: string;
   walletId: string;
@@ -14,8 +16,3 @@ export type PersistedPlay = Play & {
   id: bigint;
   createdAt: Date;
 };
-
-export type Metadata = Record<
-  string,
-  string | number | boolean | null | undefined
->;

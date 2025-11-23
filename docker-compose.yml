@@ -14,7 +14,7 @@ services:
       - 5432:5432
 
   wallet-migrations:
-    image: public.ecr.aws/h8w8n0h7/wallet-api:86c6202
+    image: public.ecr.aws/h8w8n0h7/wallet-api:6a6695c
     entrypoint: npm run db:migrate
     environment:
       DB_USERNAME: postgres
@@ -27,7 +27,7 @@ services:
         condition: service_healthy
 
   wallet-server:
-    image: public.ecr.aws/h8w8n0h7/wallet-api:86c6202
+    image: public.ecr.aws/h8w8n0h7/wallet-api:6a6695c
     environment:
       PORT: 8000
       DB_USERNAME: postgres

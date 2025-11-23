@@ -1,4 +1,5 @@
 import { LOGGER } from '../../lib/logger.js';
+import type { Metadata } from '../../lib/types.js';
 import { WalletClientError } from './errors.js';
 import type { WalletClient } from './wallet-client.js';
 
@@ -60,11 +61,16 @@ export class HttpWalletClient implements WalletClient {
     LOGGER.info('Wallet operation', { id, operation, requestId });
   }
 
-  public async credit(id: string, amount: number, requestId: string) {
+  public async credit(
+    id: string,
+    amount: number,
+    requestId: string,
+    metadata: Metadata
+  ) {
     this.logRequest(id, 'credit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/credit`, {
       method: 'POST',
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ amount, metadata }),
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId,
@@ -81,11 +87,16 @@ export class HttpWalletClient implements WalletClient {
     }>;
   }
 
-  public async debit(id: string, amount: number, requestId: string) {
+  public async debit(
+    id: string,
+    amount: number,
+    requestId: string,
+    metadata: Metadata
+  ) {
     this.logRequest(id, 'debit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/debit`, {
       method: 'POST',
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({ amount, metadata }),
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId,

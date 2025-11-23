@@ -90,8 +90,12 @@ describe('PlinkoService', () => {
         )
       );
 
-      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID);
-      expect(creditSpy).toHaveBeenCalledWith(WALLET_ID, winAmount, REQUEST_ID);
+      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
+      expect(creditSpy).toHaveBeenCalledWith(WALLET_ID, winAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
 
       expect(result).toEqual({
         playId: PLAY_ID,
@@ -157,8 +161,12 @@ describe('PlinkoService', () => {
         )
       );
 
-      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID);
-      expect(creditSpy).toHaveBeenCalledWith(WALLET_ID, winAmount, REQUEST_ID);
+      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
+      expect(creditSpy).toHaveBeenCalledWith(WALLET_ID, winAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
 
       expect(result).toEqual({
         playId: PLAY_ID,
@@ -231,7 +239,9 @@ describe('PlinkoService', () => {
       });
       expect(completePlaySpy).not.toHaveBeenCalled();
 
-      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID);
+      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
       expect(creditSpy).not.toHaveBeenCalled();
     });
 
@@ -291,7 +301,9 @@ describe('PlinkoService', () => {
       });
       expect(completePlaySpy).not.toHaveBeenCalled();
 
-      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID);
+      expect(debitSpy).toHaveBeenCalledWith(WALLET_ID, betAmount, REQUEST_ID, {
+        playId: PLAY_ID,
+      });
       expect(creditSpy).not.toHaveBeenCalled();
     });
   });
