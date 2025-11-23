@@ -1,5 +1,5 @@
 import { LOGGER } from '../../lib/logger.js';
-import { HttpWalletClientError } from './errors.js';
+import { WalletClientError } from './errors.js';
 import type { WalletClient } from './wallet-client.js';
 
 export class HttpWalletClient implements WalletClient {
@@ -22,7 +22,7 @@ export class HttpWalletClient implements WalletClient {
     const payload = (await response.json()) as Record<string, any>; // not the best
     switch (payload.error) {
       case 'WALLET_NOT_FOUND':
-        throw new HttpWalletClientError(
+        throw new WalletClientError(
           'WALLET_NOT_FOUND',
           payload,
           response.status,
@@ -30,7 +30,7 @@ export class HttpWalletClient implements WalletClient {
           requestId
         );
       case 'INVALID_DEBIT_AMOUNT':
-        throw new HttpWalletClientError(
+        throw new WalletClientError(
           'INVALID_DEBIT_AMOUNT',
           payload,
           response.status,
@@ -38,7 +38,7 @@ export class HttpWalletClient implements WalletClient {
           requestId
         );
       case 'INSUFFICIENT_FUNDS':
-        throw new HttpWalletClientError(
+        throw new WalletClientError(
           'INSUFFICIENT_FUNDS',
           payload,
           response.status,

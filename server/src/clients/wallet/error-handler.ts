@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { HttpWalletClientError } from './errors.js';
+import { WalletClientError } from './errors.js';
 import { LOGGER } from '../../lib/logger.js';
 
 // TODO: write some tests for this
@@ -9,7 +9,7 @@ export function walletClientErrorHandler(
   res: Response,
   next: NextFunction
 ) {
-  if (error instanceof HttpWalletClientError) {
+  if (error instanceof WalletClientError) {
     LOGGER.warn('Wallet client error', { ...error });
 
     switch (error.type) {

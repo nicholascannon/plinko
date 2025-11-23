@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpWalletClient } from '../http-wallet-client.js';
-import { HttpWalletClientError } from '../errors.js';
+import { WalletClientError } from '../errors.js';
 import { LOGGER } from '../../../lib/logger.js';
 
 const mockFetch = vi.fn();
@@ -92,7 +92,7 @@ describe('HttpWalletClient', () => {
       // ACTION & ASSERT
       await expect(
         client.credit(WALLET_ID, AMOUNT, REQUEST_ID)
-      ).rejects.toThrow(HttpWalletClientError);
+      ).rejects.toThrow(WalletClientError);
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
         id: WALLET_ID,
         operation: 'credit',
@@ -138,7 +138,7 @@ describe('HttpWalletClient', () => {
 
       // ACTION & ASSERT
       await expect(client.debit(WALLET_ID, AMOUNT, REQUEST_ID)).rejects.toThrow(
-        HttpWalletClientError
+        WalletClientError
       );
       expect(LOGGER.info).toHaveBeenCalledWith('Wallet operation', {
         id: WALLET_ID,
@@ -159,8 +159,8 @@ describe('HttpWalletClient', () => {
         await client.handleError(mockResponse, WALLET_ID, REQUEST_ID);
         expect.fail('Should have thrown HttpWalletClientError');
       } catch (error) {
-        expect(error).toBeInstanceOf(HttpWalletClientError);
-        const walletError = error as HttpWalletClientError;
+        expect(error).toBeInstanceOf(WalletClientError);
+        const walletError = error as WalletClientError;
         expect(walletError.type).toBe('WALLET_NOT_FOUND');
         expect(walletError.payload).toEqual(errorPayload);
         expect(walletError.httpCode).toBe(404);
@@ -182,8 +182,8 @@ describe('HttpWalletClient', () => {
         await client.handleError(mockResponse, WALLET_ID, REQUEST_ID);
         expect.fail('Should have thrown HttpWalletClientError');
       } catch (error) {
-        expect(error).toBeInstanceOf(HttpWalletClientError);
-        const walletError = error as HttpWalletClientError;
+        expect(error).toBeInstanceOf(WalletClientError);
+        const walletError = error as WalletClientError;
         expect(walletError.type).toBe('INVALID_DEBIT_AMOUNT');
         expect(walletError.payload).toEqual(errorPayload);
         expect(walletError.httpCode).toBe(400);
@@ -205,8 +205,8 @@ describe('HttpWalletClient', () => {
         await client.handleError(mockResponse, WALLET_ID, REQUEST_ID);
         expect.fail('Should have thrown HttpWalletClientError');
       } catch (error) {
-        expect(error).toBeInstanceOf(HttpWalletClientError);
-        const walletError = error as HttpWalletClientError;
+        expect(error).toBeInstanceOf(WalletClientError);
+        const walletError = error as WalletClientError;
         expect(walletError.type).toBe('INSUFFICIENT_FUNDS');
         expect(walletError.payload).toEqual(errorPayload);
         expect(walletError.httpCode).toBe(400);
