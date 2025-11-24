@@ -2,10 +2,13 @@
 
 A full-stack Plinko casino game with real-time physics simulation, wallet integration, and configurable RTP (Return to Player).
 
+![demo](./docs/demo.gif)
+
 ## Features
 
 - **Interactive Plinko Game**: Physics-based disc simulation using Pixi.js
 - **Wallet Integration**: Seamless integration with external wallet API for balance management
+  - See wallet repo https://github.com/nicholascannon/wallet-api
 - **Configurable RTP**: Adjustable return-to-player percentage with mathematical payout calculations
 - **Game History**: Persistent game records stored in PostgreSQL
 - **Real-time Balance Updates**: Live balance synchronization with wallet service
