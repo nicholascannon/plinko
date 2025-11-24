@@ -11,14 +11,14 @@ export function App() {
   if (loadingGameConfig || !wallet?.balance) return <h1>Loading...</h1>;
 
   return (
-    <div className="h-screen max-h-screen p-4">
+    <div className="h-screen max-h-screen p-8">
       <div className="flex items-center  pb-8">
         <h1 className="flex-1 text-2xl">PLINKO</h1>
         <h1 className="text-xl">${wallet.balance}</h1>
         <div className="flex-1"></div>
       </div>
 
-      <div className="flex gap-4 flex-col-reverse justify-center items-center sm:flex-row sm:items-start">
+      <div className="flex gap-4 flex-col-reverse justify-center items-center md:flex-row md:items-start">
         <div className="w-full sm:max-w-[435px] flex-1 gap-4 flex flex-col">
           <Controller />
           <PlayHistory />

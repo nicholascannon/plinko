@@ -40,17 +40,10 @@ export function PlayHistory() {
   return (
     <div>
       <h2 className="text-lg font-medium">Play History</h2>
-      <ul className="max-h-[300px] overflow-y-auto">
-        {plays.map(({ id, winAmount, multiplier, betAmount }) => (
+      <ul className="max-h-[250px] overflow-y-auto w-full">
+        {plays.map(({ id, multiplier }) => (
           <li key={id}>
-            <span>x{Number(multiplier).toFixed(1)}</span>{' '}
-            <span
-              className={
-                winAmount > betAmount ? 'text-green-500' : 'text-red-500'
-              }
-            >
-              ${Number(winAmount).toFixed(2)}
-            </span>
+            <span>x{Number(multiplier).toFixed(1)}</span>
           </li>
         ))}
       </ul>
