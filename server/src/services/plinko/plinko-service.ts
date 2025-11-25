@@ -1,5 +1,5 @@
 import type { WalletClient } from '../../clients/wallet/wallet-client.js';
-import type { GameService } from '../game/game-service.js';
+import type { PlayService } from '../play/play-service.js';
 import { PlinkoModel } from './model.js';
 import {
   createCompletePlayMetadataV1,
@@ -29,7 +29,7 @@ export class PlinkoService {
   constructor(
     private readonly plinkoModel: PlinkoModel,
     private readonly walletClient: WalletClient,
-    private readonly gameService: GameService
+    private readonly playService: PlayService
   ) {}
 
   public init(): PlinkoInit {
@@ -45,7 +45,7 @@ export class PlinkoService {
     bet: number,
     requestId: string
   ): Promise<CompletedPlay> {
-    const initPlay = await this.gameService.initPlay({
+    const initPlay = await this.playService.initPlay({
       game: PlinkoModel.GAME_IDENTIFIER,
       walletId,
       betAmount: bet.toString(),
@@ -65,7 +65,7 @@ export class PlinkoService {
           playId: initPlay.playId,
         });
 
-      const { playId } = await this.gameService.completePlay(
+      const { playId } = await this.playService.completePlay(
         initPlay.id,
         payout.toString(),
         createCompletePlayMetadataV1(
@@ -90,7 +90,7 @@ export class PlinkoService {
         },
       };
     } catch (error) {
-      await this.gameService.failPlay(initPlay.id, {
+      await this.playService.failPlay(initPlay.id, {
         requestId,
         failureReason: error instanceof Error ? error.message : 'Unknown error',
       });

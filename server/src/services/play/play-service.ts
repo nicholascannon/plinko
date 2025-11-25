@@ -1,10 +1,10 @@
 import { LOGGER } from '../../lib/logger.js';
-import type { GameRepository } from './game-repo.js';
+import type { PlayRepository } from './play-repo.js';
 import type { PersistedPlay, Play } from './types.js';
 import type { Metadata } from '../../lib/types.js';
 
-export class GameService {
-  constructor(private readonly gameRepo: GameRepository) {}
+export class PlayService {
+  constructor(private readonly gameRepo: PlayRepository) {}
 
   public async initPlay({
     game,

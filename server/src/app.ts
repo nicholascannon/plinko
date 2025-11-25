@@ -10,28 +10,28 @@ import type { WalletClient } from './clients/wallet/wallet-client.js';
 import { walletClientErrorHandler } from './clients/wallet/error-handler.js';
 import { requestIdMiddleware } from './middleware/request-id.js';
 import { CONFIG } from './config/env.js';
-import { GameService } from './services/game/game-service.js';
-import type { GameRepository } from './services/game/game-repo.js';
+import { PlayService } from './services/play/play-service.js';
+import type { PlayRepository } from './services/play/play-repo.js';
 import { PlinkoService } from './services/plinko/plinko-service.js';
 
 export function createApp({
   plinkoModel,
   enableLogging = true,
   walletClient,
-  gameRepo,
+  playRepo,
 }: {
   enableLogging?: boolean;
   plinkoModel: PlinkoModel;
   walletClient: WalletClient;
-  gameRepo: GameRepository;
+  playRepo: PlayRepository;
 }): Application {
   const app = express();
 
-  const gameService = new GameService(gameRepo);
+  const playService = new PlayService(playRepo);
   const plinkoService = new PlinkoService(
     plinkoModel,
     walletClient,
-    gameService
+    playService
   );
 
   const plinkoController = new PlinkoController(plinkoService);

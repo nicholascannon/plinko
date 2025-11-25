@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { GameService } from '../game-service.js';
-import { MockGameRepository } from '../game-repo.js';
+import { PlayService } from '../play-service.js';
+import { MockPlayRepository } from '../play-repo.js';
 
 const NOW = new Date('2025-01-01T00:00:00.000Z');
 const TRANSACTION_ID = '0-0-0-0-0';
@@ -9,23 +9,23 @@ vi.stubGlobal('crypto', {
   randomUUID: vi.fn(() => TRANSACTION_ID),
 });
 
-describe('GameService', () => {
-  let gameService: GameService;
-  let mockGameRepo: MockGameRepository;
+describe('PlayService', () => {
+  let playService: PlayService;
+  let mockPlayRepo: MockPlayRepository;
   let saveTransactionSpy: ReturnType<typeof vi.fn>;
   let getPlayEventByIdSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockGameRepo = new MockGameRepository();
+    mockPlayRepo = new MockPlayRepository();
     saveTransactionSpy = vi.spyOn(
-      MockGameRepository.prototype,
+      MockPlayRepository.prototype,
       'insertPlayEvent'
     );
     getPlayEventByIdSpy = vi.spyOn(
-      MockGameRepository.prototype,
+      MockPlayRepository.prototype,
       'getPlayEventById'
     );
-    gameService = new GameService(mockGameRepo);
+    playService = new PlayService(mockPlayRepo);
 
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(NOW);
@@ -38,7 +38,7 @@ describe('GameService', () => {
 
   describe('initPlay', () => {
     it('should create an initiated play', async () => {
-      const result = await gameService.initPlay({
+      const result = await playService.initPlay({
         game: 'plinko',
         walletId: 'wallet-123',
         betAmount: '100',
@@ -70,7 +70,7 @@ describe('GameService', () => {
 
   describe('completePlay', () => {
     it('should complete a play', async () => {
-      mockGameRepo.insertPlayEvent({
+      mockPlayRepo.insertPlayEvent({
         playId: TRANSACTION_ID,
         walletId: 'wallet-123',
         game: 'plinko',
@@ -80,7 +80,7 @@ describe('GameService', () => {
         metadata: undefined,
       });
 
-      const result = await gameService.completePlay(1n, '150', {
+      const result = await playService.completePlay(1n, '150', {
         result: 'win',
         multiplier: 1.5,
       });
@@ -108,7 +108,7 @@ describe('GameService', () => {
     });
 
     it('should throw error when init play not found', async () => {
-      await expect(gameService.completePlay(1n, '150')).rejects.toThrow(
+      await expect(playService.completePlay(1n, '150')).rejects.toThrow(
         'Play init not found when completing play'
       );
 
@@ -119,7 +119,7 @@ describe('GameService', () => {
 
   describe('failPlay', () => {
     it('should fail a play', async () => {
-      mockGameRepo.insertPlayEvent({
+      mockPlayRepo.insertPlayEvent({
         playId: TRANSACTION_ID,
         walletId: 'wallet-123',
         game: 'plinko',
@@ -129,7 +129,7 @@ describe('GameService', () => {
         metadata: undefined,
       });
 
-      const result = await gameService.failPlay(1n, {
+      const result = await playService.failPlay(1n, {
         error: 'timeout',
         reason: 'network',
       });
@@ -159,7 +159,7 @@ describe('GameService', () => {
     it('should return undefined and log warning when init play not found', async () => {
       const metadata = { error: 'not found' };
 
-      const result = await gameService.failPlay(1n, metadata);
+      const result = await playService.failPlay(1n, metadata);
 
       expect(getPlayEventByIdSpy).toHaveBeenCalledWith(1n, 'initiated');
       expect(saveTransactionSpy).not.toHaveBeenCalled();

@@ -3,15 +3,15 @@
  * like the game service operations.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PgGameRepository } from '../game-repo.js';
+import { PgPlayRepository } from '../play-repo.js';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { playsTable } from '../../../data/schema.js';
 import type { Play } from '../types.js';
 
 const NOW = new Date('2025-01-01T00:00:00.000Z');
 
-describe('PgGameRepository', () => {
-  let pgGameRepository: PgGameRepository;
+describe('PgPlayRepository', () => {
+  let pgPlayRepository: PgPlayRepository;
   let mockDb: NodePgDatabase;
   let insertValuesSpy: ReturnType<typeof vi.fn>;
   let selectFromSpy: ReturnType<typeof vi.fn>;
@@ -78,7 +78,7 @@ describe('PgGameRepository', () => {
     insertValuesSpy = mockValues;
     selectFromSpy = mockFrom;
 
-    pgGameRepository = new PgGameRepository(mockDb);
+    pgPlayRepository = new PgPlayRepository(mockDb);
   });
 
   describe('insertPlayEvent', () => {
@@ -93,7 +93,7 @@ describe('PgGameRepository', () => {
         metadata: { testKey: 'testValue' },
       };
 
-      await pgGameRepository.insertPlayEvent(play);
+      await pgPlayRepository.insertPlayEvent(play);
 
       expect(insertValuesSpy).toHaveBeenCalledWith({
         play_id: 'test-play-id',
@@ -117,7 +117,7 @@ describe('PgGameRepository', () => {
         metadata: { multiplier: 1.5 },
       };
 
-      await pgGameRepository.insertPlayEvent(play);
+      await pgPlayRepository.insertPlayEvent(play);
 
       const callArgs = insertValuesSpy.mock.calls[0]?.[0];
       expect(callArgs).toHaveProperty('bet_amount', '50.00');
@@ -132,7 +132,7 @@ describe('PgGameRepository', () => {
 
   describe('getPlayEventById', () => {
     it('should call select with correct field mappings', async () => {
-      await pgGameRepository.getPlayEventById(1n);
+      await pgPlayRepository.getPlayEventById(1n);
 
       expect(mockDb.select).toHaveBeenCalledWith({
         id: playsTable.id,
@@ -148,7 +148,7 @@ describe('PgGameRepository', () => {
     });
 
     it('should call from with playsTable', async () => {
-      await pgGameRepository.getPlayEventById(1n);
+      await pgPlayRepository.getPlayEventById(1n);
 
       expect(selectFromSpy).toHaveBeenCalledWith(playsTable);
     });

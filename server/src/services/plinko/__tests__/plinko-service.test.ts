@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PlinkoService } from '../plinko-service.js';
-import { GameService } from '../../game/game-service.js';
+import { PlayService } from '../../play/play-service.js';
 import { PlinkoModel, type PlinkoPlayResponse } from '../model.js';
 import {
-  MockGameRepository,
-  type GameRepository,
-} from '../../game/game-repo.js';
+  MockPlayRepository,
+  type PlayRepository,
+} from '../../play/play-repo.js';
 import { MemoryWalletClient } from '../../../clients/wallet/memory-wallet-client.js';
 import {
   createCompletePlayMetadataV1,
@@ -30,12 +30,12 @@ const mockPlinkoPlayResult = (response: PlinkoPlayResponse): PlinkoModel =>
   } as PlinkoModel);
 
 describe('PlinkoService', () => {
-  let gameRepo: GameRepository;
-  let gameService: GameService;
+  let playRepo: PlayRepository;
+  let playService: PlayService;
 
   beforeEach(() => {
-    gameRepo = new MockGameRepository();
-    gameService = new GameService(gameRepo);
+    playRepo = new MockPlayRepository();
+    playService = new PlayService(playRepo);
   });
 
   describe('success paths', () => {
@@ -56,14 +56,14 @@ describe('PlinkoService', () => {
       const plinkoService = new PlinkoService(
         plinkoModel,
         walletClient,
-        gameService
+        playService
       );
 
       const modelPlaySpy = vi.spyOn(plinkoModel, 'play');
       const debitSpy = vi.spyOn(walletClient, 'debit');
       const creditSpy = vi.spyOn(walletClient, 'credit');
-      const initPlaySpy = vi.spyOn(gameService, 'initPlay');
-      const completePlaySpy = vi.spyOn(gameService, 'completePlay');
+      const initPlaySpy = vi.spyOn(playService, 'initPlay');
+      const completePlaySpy = vi.spyOn(playService, 'completePlay');
 
       // test
       const result = await plinkoService.play(WALLET_ID, betAmount, REQUEST_ID);
@@ -127,14 +127,14 @@ describe('PlinkoService', () => {
       const plinkoService = new PlinkoService(
         plinkoModel,
         walletClient,
-        gameService
+        playService
       );
 
       const modelPlaySpy = vi.spyOn(plinkoModel, 'play');
       const debitSpy = vi.spyOn(walletClient, 'debit');
       const creditSpy = vi.spyOn(walletClient, 'credit');
-      const initPlaySpy = vi.spyOn(gameService, 'initPlay');
-      const completePlaySpy = vi.spyOn(gameService, 'completePlay');
+      const initPlaySpy = vi.spyOn(playService, 'initPlay');
+      const completePlaySpy = vi.spyOn(playService, 'completePlay');
 
       // test
       const result = await plinkoService.play(WALLET_ID, betAmount, REQUEST_ID);
@@ -205,15 +205,15 @@ describe('PlinkoService', () => {
       const plinkoService = new PlinkoService(
         plinkoModel,
         walletClient,
-        gameService
+        playService
       );
 
       const modelPlaySpy = vi.spyOn(plinkoModel, 'play');
       const debitSpy = vi.spyOn(walletClient, 'debit');
       const creditSpy = vi.spyOn(walletClient, 'credit');
-      const initPlaySpy = vi.spyOn(gameService, 'initPlay');
-      const completePlaySpy = vi.spyOn(gameService, 'completePlay');
-      const failPlay = vi.spyOn(gameService, 'failPlay');
+      const initPlaySpy = vi.spyOn(playService, 'initPlay');
+      const completePlaySpy = vi.spyOn(playService, 'completePlay');
+      const failPlay = vi.spyOn(playService, 'failPlay');
 
       // test
       try {
@@ -267,15 +267,15 @@ describe('PlinkoService', () => {
       const plinkoService = new PlinkoService(
         plinkoModel,
         walletClient,
-        gameService
+        playService
       );
 
       const modelPlaySpy = vi.spyOn(plinkoModel, 'play');
       const debitSpy = vi.spyOn(walletClient, 'debit');
       const creditSpy = vi.spyOn(walletClient, 'credit');
-      const initPlaySpy = vi.spyOn(gameService, 'initPlay');
-      const completePlaySpy = vi.spyOn(gameService, 'completePlay');
-      const failPlay = vi.spyOn(gameService, 'failPlay');
+      const initPlaySpy = vi.spyOn(playService, 'initPlay');
+      const completePlaySpy = vi.spyOn(playService, 'completePlay');
+      const failPlay = vi.spyOn(playService, 'failPlay');
 
       // test
       try {

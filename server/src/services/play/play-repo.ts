@@ -4,7 +4,7 @@ import type { PersistedPlay, Play, PlayStatus } from './types.js';
 import type { Metadata } from '../../lib/types.js';
 import { playsTable } from '../../data/schema.js';
 
-export interface GameRepository {
+export interface PlayRepository {
   getPlayEventById(
     id: bigint,
     status?: PlayStatus
@@ -12,7 +12,7 @@ export interface GameRepository {
   insertPlayEvent(play: Play): Promise<PersistedPlay>;
 }
 
-export class PgGameRepository implements GameRepository {
+export class PgPlayRepository implements PlayRepository {
   constructor(private readonly db: NodePgDatabase) {}
 
   public async getPlayEventById(
@@ -70,7 +70,7 @@ export class PgGameRepository implements GameRepository {
   }
 }
 
-export class MockGameRepository implements GameRepository {
+export class MockPlayRepository implements PlayRepository {
   private playEvents: PersistedPlay[] = [];
 
   public async getPlayEventById(

@@ -6,7 +6,7 @@ import { LOGGER, setupProcessLogging } from './lib/logger.js';
 import { PlinkoModel } from './services/plinko/model.js';
 import { HttpWalletClient } from './clients/wallet/http-wallet-client.js';
 import { createDb } from './data/db.js';
-import { PgGameRepository } from './services/game/game-repo.js';
+import { PgPlayRepository } from './services/play/play-repo.js';
 
 setupProcessLogging();
 
@@ -14,13 +14,13 @@ const { db } = createDb(CONFIG.db);
 
 const plinkoModel = new PlinkoModel(CONFIG.plinko);
 const walletClient = new HttpWalletClient(CONFIG.wallet.url);
-const gameRepo = new PgGameRepository(db);
+const playRepo = new PgPlayRepository(db);
 
 const app = createApp({
   enableLogging: true,
   plinkoModel,
   walletClient,
-  gameRepo,
+  playRepo,
 }).listen(CONFIG.port, () => {
   LOGGER.info('Server started', { port: CONFIG.port });
 
