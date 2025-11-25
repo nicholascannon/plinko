@@ -13,7 +13,7 @@ export function PlayHistory() {
   const [plays, setPlays] = useState<Play[]>([]);
 
   useEffect(() => {
-    const boundPlayFinishHandler = (e: PlayFinishEvent) => {
+    const onPlayFinish = (e: PlayFinishEvent) => {
       setPlays((prev) => [
         {
           id: e.detail.playId,
@@ -24,16 +24,10 @@ export function PlayHistory() {
         ...prev,
       ]);
     };
-    document.addEventListener(
-      PlayFinishEvent.TYPE,
-      boundPlayFinishHandler as EventListener
-    );
+    document.addEventListener(PlayFinishEvent.TYPE, onPlayFinish);
 
     return () => {
-      document.removeEventListener(
-        PlayFinishEvent.TYPE,
-        boundPlayFinishHandler as EventListener
-      );
+      document.removeEventListener(PlayFinishEvent.TYPE, onPlayFinish);
     };
   }, []);
 

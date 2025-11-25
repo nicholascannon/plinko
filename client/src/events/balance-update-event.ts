@@ -1,3 +1,9 @@
+declare global {
+  interface DocumentEventMap {
+    [BalanceUpdateEvent.TYPE]: BalanceUpdateEvent;
+  }
+}
+
 type Payload =
   | { balance: string; delta?: undefined }
   | { balance?: undefined; delta: number };

@@ -41,7 +41,7 @@ export function Controller({ className }: { className?: string }) {
             { walletId: CONFIG.WALLET_ID, bet: amount },
             {
               onSuccess: (res) => {
-                // only deduce bet amount from UI balance if play was successful
+                // only deduct bet amount from UI balance if play was successful
                 dispatchBalanceUpdateEvent({
                   balance: undefined,
                   delta: -amount,

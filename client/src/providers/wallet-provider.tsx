@@ -44,17 +44,10 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // TODO: type these better
-    document.addEventListener(
-      BalanceUpdateEvent.TYPE,
-      playFinish as EventListener
-    );
+    document.addEventListener(BalanceUpdateEvent.TYPE, playFinish);
 
     return () => {
-      document.removeEventListener(
-        BalanceUpdateEvent.TYPE,
-        playFinish as EventListener
-      );
+      document.removeEventListener(BalanceUpdateEvent.TYPE, playFinish);
     };
   }, [wallet]);
 

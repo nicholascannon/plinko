@@ -1,5 +1,11 @@
 import type { PlayResponse } from '../hooks/use-play';
 
+declare global {
+  interface DocumentEventMap {
+    [PlayEvent.TYPE]: PlayEvent;
+  }
+}
+
 export class PlayEvent extends CustomEvent<PlayResponse> {
   public static readonly TYPE = 'play';
 

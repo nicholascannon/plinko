@@ -7,7 +7,7 @@ import { dispatchPlayFinishEvent } from '../../events/play-finish-event';
 
 export class Plinko extends ResizeableGame {
   private board: Board;
-  private boundPlayHandler?: EventListener;
+  private boundPlayHandler?: (e: PlayEvent) => void;
 
   constructor(canvas: HTMLCanvasElement, private readonly payouts: number[]) {
     super(canvas);
@@ -31,7 +31,7 @@ export class Plinko extends ResizeableGame {
     this.app.stage.addChild(this.board);
 
     // Store bound function reference for proper cleanup
-    this.boundPlayHandler = this.play.bind(this) as EventListener; // type this better
+    this.boundPlayHandler = this.play.bind(this);
     document.addEventListener(PlayEvent.TYPE, this.boundPlayHandler);
 
     this.started = true;
