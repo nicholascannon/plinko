@@ -1,0 +1,21 @@
+meta {
+  name: Play history
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8001/v1/play/history?game=plinko-v1&walletId=4bcaf50f-7c95-4f97-9a08-fbaddf966cb9
+  body: none
+  auth: inherit
+}
+
+params:query {
+  game: plinko-v1
+  walletId: 4bcaf50f-7c95-4f97-9a08-fbaddf966cb9
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

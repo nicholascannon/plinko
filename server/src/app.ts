@@ -13,6 +13,7 @@ import { CONFIG } from './config/env.js';
 import { PlayService } from './services/play/play-service.js';
 import type { PlayRepository } from './services/play/play-repo.js';
 import { PlinkoService } from './services/plinko/plinko-service.js';
+import { PlayController } from './services/play/play-controller.js';
 
 export function createApp({
   plinkoModel,
@@ -35,6 +36,7 @@ export function createApp({
   );
 
   const plinkoController = new PlinkoController(plinkoService);
+  const playController = new PlayController(playService);
 
   app.use(requestIdMiddleware);
   app.use(
@@ -50,6 +52,7 @@ export function createApp({
   });
 
   app.use('/v1/plinko', plinkoController.router);
+  app.use('/v1/play', playController.router);
 
   app.use((req, res) => {
     return res.status(404).json({

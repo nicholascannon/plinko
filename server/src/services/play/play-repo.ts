@@ -1,5 +1,5 @@
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import type { PersistedPlay, Play, PlayStatus } from './types.js';
 import type { Metadata } from '../../lib/types.js';
 import { playsTable } from '../../data/schema.js';
@@ -10,6 +10,13 @@ export interface PlayRepository {
     status?: PlayStatus
   ): Promise<PersistedPlay | undefined>;
   insertPlayEvent(play: Play): Promise<PersistedPlay>;
+  getPlays(
+    walletId: string,
+    options: {
+      limit: number;
+      filter?: { game?: string; status?: PlayStatus };
+    }
+  ): Promise<PersistedPlay[]>;
 }
 
 export class PgPlayRepository implements PlayRepository {
@@ -68,6 +75,45 @@ export class PgPlayRepository implements PlayRepository {
       ...play,
     };
   }
+
+  public async getPlays(
+    walletId: string,
+    options: {
+      limit: number;
+      filter?: { game?: string; status?: PlayStatus };
+    }
+  ): Promise<PersistedPlay[]> {
+    const { limit, filter } = options;
+
+    const rows = await this.db
+      .select({
+        id: playsTable.id,
+        createdAt: playsTable.created_at,
+        playId: playsTable.play_id,
+        walletId: playsTable.wallet_id,
+        game: playsTable.game,
+        betAmount: playsTable.bet_amount,
+        winAmount: playsTable.win_amount,
+        status: playsTable.status,
+        metadata: playsTable.metadata,
+      })
+      .from(playsTable)
+      .where(
+        and(
+          eq(playsTable.wallet_id, walletId),
+          filter?.game ? eq(playsTable.game, filter.game) : undefined,
+          filter?.status ? eq(playsTable.status, filter.status) : undefined
+        )
+      )
+      .orderBy(desc(playsTable.created_at))
+      .limit(limit);
+
+    return rows.map((row) => ({
+      ...row,
+      winAmount: row.winAmount ?? undefined,
+      metadata: row.metadata as Metadata,
+    }));
+  }
 }
 
 export class MockPlayRepository implements PlayRepository {
@@ -93,5 +139,25 @@ export class MockPlayRepository implements PlayRepository {
     };
     this.playEvents.push(persistedPlay);
     return persistedPlay;
+  }
+
+  public async getPlays(
+    walletId: string,
+    options: {
+      limit: number;
+      filter?: { game?: string; status?: PlayStatus };
+    }
+  ): Promise<PersistedPlay[]> {
+    const { limit, filter } = options;
+
+    return this.playEvents
+      .filter(
+        (play) =>
+          play.walletId === walletId &&
+          (filter?.game ? play.game === filter.game : true) &&
+          (filter?.status ? play.status === filter.status : true)
+      )
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, options.limit);
   }
 }

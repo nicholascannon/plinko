@@ -166,4 +166,53 @@ describe('PlayService', () => {
       expect(result).toBeUndefined();
     });
   });
+
+  describe('getCompletedPlayHistory', () => {
+    it('should return empty array when theres no play history', async () => {
+      const result = await playService.getCompletedPlayHistory(
+        'wallet-123',
+        'plinko'
+      );
+
+      expect(result).toEqual([]);
+    });
+
+    it('should return only the completed play history', async () => {
+      mockPlayRepo.insertPlayEvent({
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: undefined,
+        status: 'initiated',
+        metadata: undefined,
+      });
+      mockPlayRepo.insertPlayEvent({
+        playId: TRANSACTION_ID,
+        walletId: 'wallet-123',
+        game: 'plinko',
+        betAmount: '100',
+        winAmount: '150',
+        status: 'completed',
+        metadata: { multiplier: 1.5 },
+      });
+
+      const result = await playService.getCompletedPlayHistory(
+        'wallet-123',
+        'plinko'
+      );
+
+      expect(result).toEqual([
+        {
+          playId: TRANSACTION_ID,
+          walletId: 'wallet-123',
+          game: 'plinko',
+          betAmount: '100',
+          winAmount: '150',
+          createdAt: NOW,
+          metadata: { multiplier: 1.5 },
+        },
+      ]);
+    });
+  });
 });

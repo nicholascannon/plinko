@@ -16,3 +16,13 @@ export type PersistedPlay = Play & {
   id: bigint;
   createdAt: Date;
 };
+
+export type PlayHistory = {
+  playId: string;
+  walletId: string;
+  game: string;
+  betAmount: string;
+  winAmount: string | undefined;
+  createdAt: Date;
+  metadata: Metadata | undefined;
+};

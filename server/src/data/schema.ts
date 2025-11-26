@@ -48,9 +48,10 @@ export const playsTable = gameSchema.table(
       table.wallet_id,
       table.created_at.desc()
     ),
-    index('plays_wallet_id_game_created_at_idx').on(
+    index('plays_wallet_id_game_status_created_at_idx').on(
       table.wallet_id,
       table.game,
+      table.status,
       table.created_at.desc()
     ),
   ]
