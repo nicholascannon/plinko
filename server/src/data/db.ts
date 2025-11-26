@@ -7,10 +7,11 @@ export function createDb(config: Config['db']): {
   db: NodePgDatabase;
   pool: Pool;
 } {
-  const pool = new Pool({ ...config });
+  const { logger, ...rest } = config;
+  const pool = new Pool({ ...rest });
 
   pool.on('connect', () => LOGGER.info('Postgres connected'));
   pool.on('error', (err) => LOGGER.error('Postgres pool error', err));
 
-  return { db: drizzle({ client: pool }), pool };
+  return { db: drizzle({ client: pool, logger }), pool };
 }

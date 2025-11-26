@@ -86,6 +86,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: casino
+      DB_LOGGER: true
     profiles:
       - run
     depends_on:

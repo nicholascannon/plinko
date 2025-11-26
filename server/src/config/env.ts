@@ -26,6 +26,10 @@ export const CONFIG = z
       database: z.string(),
       user: z.string(),
       password: z.string(),
+      logger: z
+        .enum(['true', 'false'])
+        .transform((val) => val === 'true')
+        .default(false),
     }),
   })
   .parse({
@@ -50,6 +54,7 @@ export const CONFIG = z
       database: process.env.DB_NAME,
       user: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
+      logger: process.env.DB_LOGGER,
     },
   });
 
