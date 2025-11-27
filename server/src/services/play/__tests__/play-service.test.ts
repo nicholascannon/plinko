@@ -169,7 +169,7 @@ describe('PlayService', () => {
 
   describe('getCompletedPlayHistory', () => {
     it('should return empty array when theres no play history', async () => {
-      const result = await playService.getPlayHistoryForGame(
+      const result = await playService.getCompletedPlayHistory(
         'wallet-123',
         'plinko'
       );
@@ -197,7 +197,7 @@ describe('PlayService', () => {
         metadata: { multiplier: 1.5 },
       });
 
-      const result = await playService.getPlayHistoryForGame(
+      const result = await playService.getCompletedPlayHistory(
         'wallet-123',
         'plinko'
       );
