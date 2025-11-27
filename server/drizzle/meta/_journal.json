@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1763761588539,
-      "tag": "0000_spotty_unicorn",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1764130552253,
-      "tag": "0001_dapper_landau",
+      "when": 1764226348325,
+      "tag": "0000_known_bastion",
       "breakpoints": true
     }
   ]

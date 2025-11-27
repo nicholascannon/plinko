@@ -82,7 +82,7 @@ export class PlayService {
     game?: string
   ): Promise<PlayHistory[]> {
     const plays = await this.playRepo.getPlays(walletId, {
-      filter: game ? { game, status: 'completed' } : { status: 'completed' },
+      filter: { game, status: 'completed' },
       limit: 100,
     });
     return plays.map((play) => ({

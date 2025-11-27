@@ -4,10 +4,10 @@ import {
   jsonb,
   numeric,
   pgSchema,
+  text,
   timestamp,
   unique,
   uuid,
-  varchar,
 } from 'drizzle-orm/pg-core';
 
 // don't export as this is already created by drizzle
@@ -30,7 +30,7 @@ export const playsTable = gameSchema.table(
     bet_amount: numeric({ precision: 10, scale: 2 }).notNull(),
     win_amount: numeric({ precision: 10, scale: 2 }),
 
-    game: varchar({ length: 30 }).notNull(),
+    game: text().notNull(),
 
     status: playStatus().notNull(),
 
@@ -44,10 +44,13 @@ export const playsTable = gameSchema.table(
       table.status
     ),
     index('plays_play_id_index').on(table.play_id),
+    // Required for querying entire play history of a wallet
     index('plays_wallet_id_created_at_idx').on(
       table.wallet_id,
+      table.status,
       table.created_at.desc()
     ),
+    // Supports querying completed play history for a game
     index('plays_wallet_id_game_status_created_at_idx').on(
       table.wallet_id,
       table.game,

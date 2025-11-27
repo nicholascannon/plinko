@@ -1,2 +1,0 @@
-DROP INDEX "game"."plays_wallet_id_game_created_at_idx";--> statement-breakpoint
-CREATE INDEX "plays_wallet_id_game_status_created_at_idx" ON "game"."plays" USING btree ("wallet_id","game","status","created_at" DESC NULLS LAST);

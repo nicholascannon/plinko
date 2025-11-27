@@ -14,7 +14,7 @@ export interface PlayRepository {
     walletId: string,
     options: {
       limit: number;
-      filter?: { game?: string; status?: PlayStatus };
+      filter?: { game: string; status: PlayStatus } | { status: PlayStatus };
     }
   ): Promise<PersistedPlay[]>;
 }
@@ -80,7 +80,7 @@ export class PgPlayRepository implements PlayRepository {
     walletId: string,
     options: {
       limit: number;
-      filter?: { game?: string; status?: PlayStatus };
+      filter?: { game: string; status: PlayStatus } | { status: PlayStatus };
     }
   ): Promise<PersistedPlay[]> {
     const { limit, filter } = options;
@@ -101,8 +101,10 @@ export class PgPlayRepository implements PlayRepository {
       .where(
         and(
           eq(playsTable.wallet_id, walletId),
-          filter?.game ? eq(playsTable.game, filter.game) : undefined,
-          filter?.status ? eq(playsTable.status, filter.status) : undefined
+          ...(filter && 'game' in filter
+            ? [eq(playsTable.game, filter.game)]
+            : []),
+          ...(filter?.status ? [eq(playsTable.status, filter.status)] : [])
         )
       )
       .orderBy(desc(playsTable.created_at))

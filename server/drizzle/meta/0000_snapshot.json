@@ -1,5 +1,5 @@
 {
-  "id": "5e68c7b9-cc07-420f-85ee-a1f56dd32b4d",
+  "id": "2f4bfdca-94c3-4110-9578-3cde0e1c7a79",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -40,7 +40,7 @@
         },
         "game": {
           "name": "game",
-          "type": "varchar(30)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -92,6 +92,12 @@
               "nulls": "last"
             },
             {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
               "expression": "created_at",
               "isExpression": false,
               "asc": false,
@@ -103,8 +109,8 @@
           "method": "btree",
           "with": {}
         },
-        "plays_wallet_id_game_created_at_idx": {
-          "name": "plays_wallet_id_game_created_at_idx",
+        "plays_wallet_id_game_status_created_at_idx": {
+          "name": "plays_wallet_id_game_status_created_at_idx",
           "columns": [
             {
               "expression": "wallet_id",
@@ -114,6 +120,12 @@
             },
             {
               "expression": "game",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
