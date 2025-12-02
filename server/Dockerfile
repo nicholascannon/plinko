@@ -14,6 +14,7 @@ COPY vitest.config.ts .
 COPY ./src ./src
 
 RUN npm run build
+RUN npm run lint
 RUN npm run test
 
 FROM base AS runtime

@@ -160,6 +160,6 @@ export class MockPlayRepository implements PlayRepository {
           (filter?.status ? play.status === filter.status : true)
       )
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .slice(0, options.limit);
+      .slice(0, limit);
   }
 }

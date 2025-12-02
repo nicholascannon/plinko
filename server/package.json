@@ -8,7 +8,8 @@
     "test": "vitest",
     "test:rtp": "tsx src/services/plinko/rtp-test.ts",
     "db:migrate": "drizzle-kit migrate",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "lint": "oxlint"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
@@ -16,6 +17,8 @@
     "@types/node": "^24.10.0",
     "@types/pg": "^8.15.6",
     "drizzle-kit": "^0.31.7",
+    "oxlint": "^1.30.0",
+    "oxlint-tsgolint": "^0.8.3",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^4.0.8"
