@@ -5,10 +5,10 @@ import { useWallet } from './providers/wallet-provider';
 import { PlayHistory } from './components/play-history';
 
 export function App() {
-  const { data: gameConfig, isLoading: loadingGameConfig } = useGameConfig();
+  const { data: gameConfig } = useGameConfig();
   const wallet = useWallet();
 
-  if (loadingGameConfig || !wallet?.balance) return <h1>Loading...</h1>;
+  if (!gameConfig || !wallet?.balance) return <h1>Loading...</h1>;
 
   return (
     <div className="h-screen max-h-screen p-8">
