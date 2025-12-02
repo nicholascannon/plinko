@@ -11,10 +11,10 @@ type Play = {
 };
 
 export function PlayHistory() {
+  const [plays, setPlays] = useState<Play[]>([]);
   const { data: playHistory, isLoading } = usePlinkoPlayHistory(
     CONFIG.WALLET_ID
   );
-  const [plays, setPlays] = useState<Play[]>([]);
 
   useEffect(() => {
     if (playHistory) {
@@ -23,8 +23,7 @@ export function PlayHistory() {
           id: play.playId,
           winAmount: play.winAmount,
           multiplier:
-            // This could be done a bit better
-            (play.metadata.multiplier as number)?.toFixed(1) ?? '0.00',
+            (play.metadata.multiplier as number)?.toFixed(1) ?? 'Error',
           betAmount: play.betAmount,
         }))
       );

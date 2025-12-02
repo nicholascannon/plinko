@@ -13,10 +13,24 @@ export function Controller({ className }: { className?: string }) {
   const wallet = useWallet();
 
   const betDisabled =
-    !wallet?.balance ||
-    Number(wallet.balance) < amount ||
+    Number(wallet?.balance ?? 0) < amount ||
     amount < MIN_BET_AMOUNT ||
     isPending;
+
+  const onPlay = () => {
+    if (betDisabled) return;
+
+    play(
+      { walletId: CONFIG.WALLET_ID, bet: amount },
+      {
+        onSuccess: (res) => {
+          // only deduct bet amount from UI balance if play was successful
+          dispatchBalanceUpdateEvent({ delta: -amount });
+          dispatchPlayEvent(res);
+        },
+      }
+    );
+  };
 
   return (
     <div className={`${className} flex flex-col gap-2`}>
@@ -36,21 +50,7 @@ export function Controller({ className }: { className?: string }) {
       <button
         className="w-full bg-green-400 p-2 rounded text-white cursor-pointer hover:bg-green-500 active:bg-green-600 outline-green-500 disabled:bg-gray-500 disabled:cursor-not-allowed"
         disabled={betDisabled}
-        onClick={() => {
-          play(
-            { walletId: CONFIG.WALLET_ID, bet: amount },
-            {
-              onSuccess: (res) => {
-                // only deduct bet amount from UI balance if play was successful
-                dispatchBalanceUpdateEvent({
-                  balance: undefined,
-                  delta: -amount,
-                });
-                dispatchPlayEvent(res);
-              },
-            }
-          );
-        }}
+        onClick={onPlay}
       >
         {isPending ? 'LOADING...' : 'BET'}
       </button>

@@ -14,13 +14,13 @@ type PlayHistory = {
 const GAME_NAME = 'plinko-v1';
 
 export function usePlinkoPlayHistory(walletId: string) {
-  const params = new URLSearchParams();
-  params.set('walletId', walletId);
-  params.set('game', GAME_NAME);
-
   return useQuery<{ plays: PlayHistory[] }, Error>({
     queryKey: ['plinko-play-history', walletId],
     queryFn: async () => {
+      const params = new URLSearchParams();
+      params.set('walletId', walletId);
+      params.set('game', GAME_NAME);
+
       const response = await fetch(
         `${CONFIG.GAME_SERVER_URL}/v1/play/history?${params.toString()}`
       );
