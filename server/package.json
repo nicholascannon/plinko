@@ -9,7 +9,7 @@
     "test:rtp": "tsx src/services/plinko/rtp-test.ts",
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
-    "lint": "oxlint"
+    "lint": "oxlint src"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
