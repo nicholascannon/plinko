@@ -21,7 +21,7 @@ export function Controller({ className }: { className?: string }) {
     if (betDisabled) return;
 
     play(
-      { walletId: CONFIG.WALLET_ID, bet: amount },
+      { walletId: CONFIG.WALLET_ID, bet: amount.toFixed(2) },
       {
         onSuccess: (res) => {
           // only deduct bet amount from UI balance if play was successful

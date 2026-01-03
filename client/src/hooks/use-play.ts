@@ -3,7 +3,7 @@ import { CONFIG } from '../config';
 
 export type PlayArgs = {
   walletId: string;
-  bet: number;
+  bet: string;
 };
 
 export type PlayResponse = {

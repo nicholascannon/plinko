@@ -4,7 +4,7 @@ import { WalletClientError } from './errors.js';
 import type { WalletClient } from './wallet-client.js';
 
 export class HttpWalletClient implements WalletClient {
-  constructor(private readonly baseUrl: string) {}
+  constructor(private readonly baseUrl: string) { }
 
   public async getBalance(id: string, requestId: string) {
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}`, {
@@ -70,7 +70,7 @@ export class HttpWalletClient implements WalletClient {
     this.logRequest(id, 'credit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/credit`, {
       method: 'POST',
-      body: JSON.stringify({ amount, metadata }),
+      body: JSON.stringify({ amount: amount.toString(), metadata }),
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId,
@@ -96,7 +96,7 @@ export class HttpWalletClient implements WalletClient {
     this.logRequest(id, 'debit', requestId);
     const response = await fetch(`${this.baseUrl}/v1/wallet/${id}/debit`, {
       method: 'POST',
-      body: JSON.stringify({ amount, metadata }),
+      body: JSON.stringify({ amount: amount.toString(), metadata }),
       headers: {
         'Content-Type': 'application/json',
         'X-Request-Id': requestId,

@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import { z } from 'zod';
 import type { PlinkoService } from './plinko-service.js';
 import { toValidMoney } from '../../lib/utils/number.js';
+import { money } from '../../lib/validation.js';
 
 export class PlinkoController {
   public readonly router: Router;
@@ -26,7 +27,7 @@ export class PlinkoController {
 
   private playSchema = z.object({
     walletId: z.string(),
-    bet: z.number().min(1).max(1_000_000).transform(toValidMoney),
+    bet: money.pipe(z.number().min(1).max(1_000_000)),
   });
 
   private play = async (req: Request, res: Response): Promise<Response> => {

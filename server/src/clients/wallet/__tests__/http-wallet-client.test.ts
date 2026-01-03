@@ -76,7 +76,7 @@ describe('HttpWalletClient', () => {
         {
           method: 'POST',
           body: JSON.stringify({
-            amount: AMOUNT,
+            amount: AMOUNT.toString(),
             metadata: { playId: 'play-123' },
           }),
           headers: {
@@ -128,7 +128,7 @@ describe('HttpWalletClient', () => {
         {
           method: 'POST',
           body: JSON.stringify({
-            amount: AMOUNT,
+            amount: AMOUNT.toString(),
             metadata: { playId: 'play-123' },
           }),
           headers: {
