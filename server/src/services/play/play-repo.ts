@@ -14,13 +14,13 @@ export interface PlayRepository {
     walletId: string,
     options: {
       limit: number;
-      filter?: { game: string; status: PlayStatus } | { status: PlayStatus };
+      filter: { game: string; status: PlayStatus } | { status: PlayStatus };
     }
   ): Promise<PersistedPlay[]>;
 }
 
 export class PgPlayRepository implements PlayRepository {
-  constructor(private readonly db: NodePgDatabase) {}
+  constructor(private readonly db: NodePgDatabase) { }
 
   public async getPlayEventById(
     id: bigint,
