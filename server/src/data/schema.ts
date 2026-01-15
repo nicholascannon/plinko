@@ -45,7 +45,7 @@ export const playsTable = gameSchema.table(
     ),
     index('plays_play_id_index').on(table.play_id),
     // Required for querying entire play history of a wallet
-    index('plays_wallet_id_created_at_idx').on(
+    index('plays_wallet_id_status_created_at_idx').on(
       table.wallet_id,
       table.status,
       table.created_at.desc()

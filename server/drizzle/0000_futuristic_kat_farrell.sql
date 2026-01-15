@@ -13,5 +13,5 @@ CREATE TABLE "game"."plays" (
 );
 --> statement-breakpoint
 CREATE INDEX "plays_play_id_index" ON "game"."plays" USING btree ("play_id");--> statement-breakpoint
-CREATE INDEX "plays_wallet_id_created_at_idx" ON "game"."plays" USING btree ("wallet_id","status","created_at" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "plays_wallet_id_status_created_at_idx" ON "game"."plays" USING btree ("wallet_id","status","created_at" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "plays_wallet_id_game_status_created_at_idx" ON "game"."plays" USING btree ("wallet_id","game","status","created_at" DESC NULLS LAST);

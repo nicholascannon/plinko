@@ -1,5 +1,5 @@
 {
-  "id": "2f4bfdca-94c3-4110-9578-3cde0e1c7a79",
+  "id": "b93f9354-37bf-4eb8-a705-19e49d856f6a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -82,8 +82,8 @@
           "method": "btree",
           "with": {}
         },
-        "plays_wallet_id_created_at_idx": {
-          "name": "plays_wallet_id_created_at_idx",
+        "plays_wallet_id_status_created_at_idx": {
+          "name": "plays_wallet_id_status_created_at_idx",
           "columns": [
             {
               "expression": "wallet_id",
