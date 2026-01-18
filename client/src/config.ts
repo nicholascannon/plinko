@@ -1,5 +1,7 @@
 export const CONFIG = {
-  GAME_SERVER_URL: 'http://localhost:8001',
-  WALLET_SERVER_URL: 'http://localhost:8000',
+  GAME_SERVER_URL:
+    import.meta.env.VITE_GAME_SERVER_URL || 'http://localhost:8001',
+  WALLET_SERVER_URL:
+    import.meta.env.VITE_WALLET_SERVER_URL || 'http://localhost:8000',
   WALLET_ID: '4bcaf50f-7c95-4f97-9a08-fbaddf966cb9',
 };

@@ -14,7 +14,7 @@ services:
       - 5432:5432
 
   wallet-migrations:
-    image: public.ecr.aws/h8w8n0h7/wallet-api:7c4c089
+    image: public.ecr.aws/h8w8n0h7/wallet-api:latest
     entrypoint: npm run db:migrate
     environment:
       DB_USERNAME: postgres
@@ -27,7 +27,7 @@ services:
         condition: service_healthy
 
   wallet-server:
-    image: public.ecr.aws/h8w8n0h7/wallet-api:7c4c089
+    image: public.ecr.aws/h8w8n0h7/wallet-api:latest
     environment:
       PORT: 8000
       DB_USERNAME: postgres
@@ -94,5 +94,24 @@ services:
         condition: service_healthy
       game-migrations:
         condition: service_completed_successfully
+      wallet-server:
+        condition: service_healthy
+
+  client:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run start -- --host"
+    ports:
+      - 5173:5173
+    volumes:
+      - ./client:/app
+    environment:
+      VITE_GAME_SERVER_URL: http://localhost:8001
+      VITE_WALLET_SERVER_URL: http://localhost:8000
+    profiles:
+      - run
+    depends_on:
+      game-server:
+        condition: service_started
       wallet-server:
         condition: service_healthy
